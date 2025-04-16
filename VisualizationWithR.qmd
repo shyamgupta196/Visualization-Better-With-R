@@ -1,0 +1,444 @@
+---
+title: "Visualize Better with R"
+author:
+  name:
+     given: "Shyam Gupta"
+  email: shyam.gupta@gesis.org
+  orcid: https://orcid.org/0009-0003-4639-5618
+  affiliations:
+    - name: GESIS Leibniz Institute for the Social Sciences
+
+    
+date: "2025-04-10"
+format: 
+  html: 
+    toc: true
+    toc-depth: 3
+    code-fold: true
+execute: 
+  warning: false
+  message: false
+  echo: true
+
+---
+
+# Introduction
+
+I was working on a social science research project—trying to decode the relationship between people's well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story. 
+
+"I needed a better way to visualize my data to spot trends, patterns, and outliers". That is when my journey with data visualization in **R** began. 
+
+
+## Learning Objective
+In this tutorial, I'll walk you through the plots and visual techniques. I'll share each plot in the order I stumbled upon them, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
+
+By the end of this tutorial, you’ll have a handy arsenal of 5-8 powerful visualization techniques perfect for social science data exploration. Let’s get started!
+
+### Duration
+Around 10-15 mins
+
+
+## 1. Swarm Plots over Scatter Plots
+
+**The Discovery:**
+
+My first big "aha" moment came when I had to compare numerical data (like response scores) across different groups (like age brackets). I found that regular scatter plots overlapped points too much—making it hard to see the data distribution.
+
+**The Hero (Swarm Plot):**
+
+A **swarm plot** is particularly useful when you want to display the distribution of a numerical variable across different categories, *without losing individual data points*. Unlike simple scatter plots, swarm plots arrange points to avoid overlap, helping you see each observation more clearly.
+
+**When to Use:**\
+- You have a moderate number of data points (not too large).\
+- You want to see each individual data point by category.\
+- You want a more "transparent" view of the distribution than a box or violin plot alone can provide.
+
+```{r}
+# --------------------------------------------------
+# Install/load the required packages (uncomment if needed)
+# --------------------------------------------------
+# install.packages("dplyr")
+# install.packages("tidyr")
+# install.packages("ggplot2")
+# install.packages("ggbeeswarm")
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggbeeswarm)
+
+# --------------------------------------------------
+# Create a synthetic dataset (Replace with your actual data)
+# --------------------------------------------------
+set.seed(42)
+df <- data.frame(
+  radius_mean    = runif(100, min = 12, max = 16),
+  texture_mean   = runif(100, min = 15, max = 25),
+  perimeter_mean = runif(100, min = 70, max = 110),
+  area_mean      = runif(100, min = 350, max = 750),
+  concavity_mean = runif(100, min = 0.1, max = 0.5),
+  symmetry_mean  = runif(100, min = 0.15, max = 0.25),
+  diagnosis      = sample(c("Group A", "Group B"), 100, replace = TRUE)
+)
+
+# --------------------------------------------------
+# Reshape data from wide to long
+# --------------------------------------------------
+df_long <- df %>%
+  pivot_longer(
+    cols = c(radius_mean, texture_mean, perimeter_mean, 
+             area_mean, concavity_mean, symmetry_mean),
+    names_to = "feature",
+    values_to = "value"
+  )
+
+# --------------------------------------------------
+# Create the swarm (bee swarm) plot
+# --------------------------------------------------
+ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
+  geom_beeswarm(size = 1.5, cex = 1) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Distribution of Mean Features by Group",
+    x = "Feature",
+    y = "Value"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+```
+
+## 2. Density Plots
+
+**The Discovery:**
+
+Next, I wanted to understand the distribution of responses for certain questions (like “level of trust in institutions”) across two different demographic segments. A bar chart wasn’t capturing the shape of each distribution. A histogram might work, but I wanted a smoothed look.
+
+**The Hero (Density Plot):**
+
+A density plot provides a smoothed curve of the distribution. It’s like a refined histogram where you can compare the shapes of different groups without the rough bin edges. This is especially helpful in social science when you want to see if one group’s responses skew higher or lower than another’s.
+
+**When to Use:**
+
+You want to see the distribution (shape, skew, modality) of a numerical variable. You have one or more categorical variables to compare (e.g., group A vs. group B). A smoother visualization of distribution is more intuitive than a histogram.
+
+```{r}
+# install.packages("ggplot2")  # if not already installed
+library(ggplot2)
+library(dplyr)
+
+# Using our df from above
+# Compare distribution of 'area_mean' for each diagnosis group
+ggplot(df, aes(x = area_mean, fill = diagnosis)) +
+  geom_density(alpha = 0.6) +
+  theme_minimal() +
+  labs(
+    title = "Density Plot of Area Mean by Group",
+    x = "Area Mean",
+    y = "Density",
+    fill = "Group"
+  )
+
+```
+
+## 3. Box Plots w/ Jitter
+
+**The Discovery:**
+
+Sometimes, I needed a quick sense of how responses (like “support for policy X”) varied across multiple categories (such as different regions). A **box plot** is a classic: it shows median, quartiles, and outliers. But I still wanted to see *some*individual data points.
+
+**The Hero (Box Plot + Jitter):**
+
+By adding a jittered layer of points over the box plot, you get the best of both worlds: summary statistics and a look at each observation. This helps you see if outliers are truly outliers or if there’s a cluster you need to investigate further.
+
+**When to Use:**
+
+-   You have at least one categorical variable (e.g., region, demographic) and one numeric variable (e.g., test score).
+
+-   You want a quick summary (median, quartiles) plus the data distribution.
+
+-   You’re dealing with moderate sample sizes (too large can become messy).
+
+```{R}
+#| echo: false
+
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+
+# create a dataset
+data <- data.frame(
+  name=c( rep("A",500), rep("B",500), rep("B",500), rep("C",20), rep('D', 100)  ),
+  value=c( rnorm(500, 10, 5), rnorm(500, 13, 1), rnorm(500, 18, 1), rnorm(20, 25, 4), rnorm(100, 12, 1) )
+)
+
+# Plot
+data %>%
+  ggplot( aes(x=name, y=value, fill=name)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+```
+
+## 4. Violin Plot
+
+**The Discovery:**
+
+I heard about **violin plots** when I wanted to see not just the median and quartiles but also the full *kernel density* shape of my data. This approach can show subtle differences between groups that a box plot alone might hide.
+
+**The Hero (Violin Plot):**
+
+Violin plots combine the ideas of a box plot and a density plot, giving you a wider view of data distribution for each category. The shape of the violin reveals how data is concentrated across its range.
+
+**When to Use:**
+
+-   Similar to box plots, but you care about the full distribution shape.
+
+-   Great for comparing multiple groups at once if you want a holistic view of the distribution.
+
+```{R}
+# Libraries
+library(ggplot2)
+library(dplyr)
+library(forcats)
+library(hrbrthemes)
+library(viridis)
+
+# Load dataset from github
+data <- read.table("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/10_OneNumSevCatSubgroupsSevObs.csv", header=T, sep=",") %>%
+  mutate(tip = round(tip/total_bill*100, 1))
+  
+# Grouped
+data %>%
+  mutate(day = fct_reorder(day, tip)) %>%
+  mutate(day = factor(day, levels=c("Thur", "Fri", "Sat", "Sun"))) %>%
+  ggplot(aes(fill=sex, y=tip, x=day)) + 
+    geom_violin(position="dodge", alpha=0.5, outlier.colour="transparent") +
+    scale_fill_viridis(discrete=T, name="") +
+    theme_ipsum()  +
+    xlab("") +
+    ylab("Tip (%)") +
+    ylim(0,40)
+```
+
+## 5. Bar + Line Plot
+
+**The Discovery:**
+
+When analyzing time-series survey data (e.g., monthly participant counts in a study), I wanted both an overview (like a bar chart) and a trend line. That’s when I discovered that combining a line over bars can illustrate both total monthly counts and the trend.
+
+**The Hero (Bar + Line Combo):**
+
+This visualization uses bars to represent absolute values (e.g., counts) while overlaying a line to depict the trend over time. It’s particularly useful for presenting monthly or yearly data in social research.
+
+**When to Use:**
+
+-   To show both individual period values (bars) and the overall trend (line) for time-series data.
+
+-   When you need to understand the fluctuations and overall pattern over time.
+
+```{r}
+# Load required libraries
+# install.packages("ggplot2") # if not installed
+# install.packages("zoo")    # if not installed
+library(ggplot2)
+library(zoo)
+
+data("AirPassengers")
+
+# Convert the AirPassengers time series into a data frame using as.yearmon for correct date conversion
+df_air <- data.frame(
+  Month = as.Date(as.yearmon(time(AirPassengers))),  # Properly convert fractional years to dates
+  Passengers = as.numeric(AirPassengers)
+)
+
+# Plot: Bar + Line Chart
+ggplot(df_air, aes(x = Month)) +
+  geom_col(aes(y = Passengers), fill = "salmon", width = 25) +  # Bar chart (width is in days)
+  geom_line(aes(y = Passengers), color = "blue", size = 1) +      # Line over bars
+  labs(
+    title = "Monthly International Airline Passengers (1949–1960)",
+    subtitle = "Data from the AirPassengers dataset",
+    x = "Month",
+    y = "Passengers"
+  ) +
+  theme_minimal()
+
+```
+
+## 6. Correlation Heatmap
+
+**The Discovery:**
+
+As my research progressed, I needed a quick overview of how various numerical features related to each other. Rather than looking at a numeric matrix, I discovered that a **correlation heatmap** visually highlights strong or weak associations in one glance.
+
+**The Hero (Correlation Heatmap):**
+
+This plot uses a color scale to indicate the strength and direction of correlations between variables. It’s invaluable for identifying which variables might be redundant or highly interrelated.
+
+**When to Use:**
+
+-   When dealing with multiple numerical variables.
+
+-   To quickly assess which pairs of variables have strong positive or negative correlations.
+
+```{r}
+# install.packages("corrplot")   # if not already installed
+library(corrplot)
+
+# Calculate correlation matrix using numeric columns from the synthetic dataset
+num_cols <- c("radius_mean", "texture_mean", "perimeter_mean", 
+              "area_mean", "concavity_mean", "symmetry_mean")
+corr_matrix <- cor(df[, num_cols])
+
+# Plot the correlation heatmap
+corrplot(corr_matrix, method = "color", type = "upper", 
+         addCoef.col = "black", tl.col = "black", 
+         title = "Correlation Heatmap of Synthetic Features", 
+         mar = c(0, 0, 2, 0))
+
+```
+
+## 7. Scatter Plot with Regression Line
+
+**The Discovery:**
+
+I often wondered if one factor could predict another—like, does “annual income” predict “annual charitable donations”? A **scatter plot** with a regression line quickly sheds light on such questions by showing the trend between two numerical variables.
+
+**The Hero (Scatter + Regression):**
+
+Overlaying a linear regression line on a scatter plot can help you gauge the direction (and strength) of a relationship. This visualization is a great stepping stone to more sophisticated statistical analysis.
+
+**When to Use:**
+
+-   To examine the relationship between two numerical variables.
+
+-   When you want a quick visual indication of a linear trend before engaging in deeper statistical testing.
+
+```{r}
+# Reuse the synthetic dataset 'df'
+ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
+  geom_point(size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Scatter Plot with Regression Line",
+    x = "Radius Mean",
+    y = "Area Mean"
+  ) +
+  theme_minimal()
+
+```
+
+## 8. Stacked Bar Charts
+
+**The Discovery:**
+
+To round out my visualizations, I wanted a chart that showed how responses were divided among multiple categories (like political affiliation vs. policy preference). A **stacked bar chart** provides an intuitive view of how parts of a whole come together across groups.
+
+**The Hero (Stacked Bar Chart):**
+
+This chart is effective for quickly comparing the contribution of sub-categories within the main categories. It’s ideal for data where you want to assess both the total counts and the proportional breakdown of groups.
+
+**When to Use:**
+
+-   When you have two or more categorical variables.
+
+-   To compare not only overall counts but also the internal composition of each group.
+
+```{r}
+# Create synthetic data for a stacked bar chart
+set.seed(123)
+df_stack <- data.frame(
+  Region = sample(c("North", "South", "East", "West"), 200, replace = TRUE),
+  Preference = sample(c("Support", "Oppose", "Neutral"), 200, replace = TRUE)
+)
+
+# Generate the stacked bar chart
+ggplot(df_stack, aes(x = Region, fill = Preference)) +
+  geom_bar(position = "stack") +
+  labs(
+    title = "Stacked Bar Chart of Preferences by Region",
+    x = "Region",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+# Load required libraries for mapping
+library(ggplot2)
+library(maps)
+library(dplyr)
+
+# Get the map data for US states
+states_map <- map_data("state")
+
+# Create synthetic social index data for each US state
+set.seed(42)
+state_data <- data.frame(
+  region = tolower(state.name),
+  social_index = runif(50, min = 0, max = 100)
+)
+
+# Merge the map data with the synthetic social index data
+us_data <- left_join(states_map, state_data, by = "region")
+
+# Plot the US States Choropleth Map
+ggplot(us_data, aes(x = long, y = lat, group = group, fill = social_index)) +
+  geom_polygon(color = "white") +
+  coord_fixed(1.3) +
+  theme_minimal() +
+  labs(
+    title = "US States Social Index Choropleth",
+    fill = "Social Index"
+  )
+# Get world map data
+world_map <- map_data("world")
+
+# Create synthetic data for global cities with social event counts
+set.seed(123)
+cities <- data.frame(
+  city = paste("City", 1:30),
+  long = runif(30, min = -180, max = 180),
+  lat  = runif(30, min = -90, max = 90),
+  event_count = sample(1:100, 30, replace = TRUE)
+)
+
+# Plot the world map with points for each city
+ggplot() +
+  geom_polygon(data = world_map, aes(x = long, y = lat, group = group), fill = "gray90", color = "white") +
+  geom_point(data = cities, aes(x = long, y = lat, size = event_count), color = "blue", alpha = 0.7) +
+  coord_fixed(1.3) +
+  theme_minimal() +
+  labs(
+    title = "Global Social Event Locations(On Synthetic Data!)",
+    size = "Event Count"
+  )
+
+
+```
+
+## Conclusion
+
+With this tutorial now you have more weapons in your arsenal to use R and visualize better to draw insights from them. 
+
+## References and reading material -
+
+-   **South East Asia Analytics** – [Kaggle Notebook](https://www.kaggle.com/code/caesarmario/southeast-asia-happiness-report-2021#3.-%7C-Top-4-Countries-%F0%9F%8F%864%EF%B8%8F%E2%83%A3)
+
+<!-- -->
+
+-   **Mental Health Viz** – [Kaggle Notebook](https://www.kaggle.com/code/melissamonfared/mental-health-music-relationship-analysis-eda)
+
+-   **R for Data Science** (Wickham & Grolemund) – A comprehensive guide on data manipulation and visualization in R.
+
+-   **Data to Viz** – [Data to Viz](https://www.data-to-viz.com/) for insights on selecting the right chart type.
