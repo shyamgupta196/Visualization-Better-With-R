@@ -1,7 +1,7 @@
 # install.R
-
+install.pacakges("rlang")
 install.packages("ggplot2")
-install.packages("dplyr")
+install.packages("dplyr", dependencies = TRUE)
 install.packages("forcats")
 install.packages("hrbrthemes")
 install.packages("viridis")
