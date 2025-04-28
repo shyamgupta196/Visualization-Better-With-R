@@ -54,6 +54,8 @@ A **swarm plot** is particularly useful when you want to display the distributio
 - You want a more "transparent" view of the distribution than a box or violin plot alone can provide.
 
 ```{r}
+#| label: install-packages
+#| eval: false
 # --------------------------------------------------
 # Install/load the required packages (uncomment if needed)
 # --------------------------------------------------
@@ -124,6 +126,8 @@ A density plot provides a smoothed curve of the distribution. It’s like a refi
 You want to see the distribution (shape, skew, modality) of a numerical variable. You have one or more categorical variables to compare (e.g., group A vs. group B). A smoother visualization of distribution is more intuitive than a histogram.
 
 ```{r}
+#| label: install-packages
+#| eval: false
 # install.packages("ggplot2")  # if not already installed
 library(ggplot2)
 library(dplyr)
@@ -162,7 +166,8 @@ By adding a jittered layer of points over the box plot, you get the best of both
 
 ```{R}
 #| echo: false
-
+#| label: install-packages
+#| eval: false
 library(tidyverse)
 library(hrbrthemes)
 library(viridis)
@@ -205,6 +210,8 @@ Violin plots combine the ideas of a box plot and a density plot, giving you a wi
 -   Great for comparing multiple groups at once if you want a holistic view of the distribution.
 
 ```{R}
+#| label: install-packages
+#| eval: false
 # Libraries
 library(ggplot2)
 library(dplyr)
@@ -246,6 +253,8 @@ This visualization uses bars to represent absolute values (e.g., counts) while o
 -   When you need to understand the fluctuations and overall pattern over time.
 
 ```{r}
+#| label: install-packages
+#| eval: false
 # Load required libraries
 # install.packages("ggplot2") # if not installed
 # install.packages("zoo")    # if not installed
@@ -291,6 +300,9 @@ This plot uses a color scale to indicate the strength and direction of correlati
 -   To quickly assess which pairs of variables have strong positive or negative correlations.
 
 ```{r}
+#| label: install-packages
+#| eval: false
+
 # install.packages("corrplot")   # if not already installed
 library(corrplot)
 
@@ -324,6 +336,9 @@ Overlaying a linear regression line on a scatter plot can help you gauge the dir
 -   When you want a quick visual indication of a linear trend before engaging in deeper statistical testing.
 
 ```{r}
+#| label: install-packages
+#| eval: false
+
 # Reuse the synthetic dataset 'df'
 ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
   geom_point(size = 2, alpha = 0.7) +
@@ -354,6 +369,9 @@ This chart is effective for quickly comparing the contribution of sub-categories
 -   To compare not only overall counts but also the internal composition of each group.
 
 ```{r}
+#| label: install-packages
+#| eval: false
+
 # Create synthetic data for a stacked bar chart
 set.seed(123)
 df_stack <- data.frame(
@@ -374,6 +392,9 @@ ggplot(df_stack, aes(x = Region, fill = Preference)) +
 ```
 
 ```{r}
+#| label: install-packages
+#| eval: false
+
 # Load required libraries for mapping
 library(ggplot2)
 library(maps)
