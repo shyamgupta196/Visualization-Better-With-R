@@ -69,7 +69,7 @@ library(ggplot2)
 library(ggbeeswarm)
 
 # --------------------------------------------------
-# Create a synthetic dataset (Replace with your actual data)
+# We create a synthetic dataset for now you can replace with your actual data later.
 # --------------------------------------------------
 set.seed(42)
 df <- data.frame(
@@ -83,7 +83,7 @@ df <- data.frame(
 )
 
 # --------------------------------------------------
-# Reshape data from wide to long
+# reshape data from wide to long
 # --------------------------------------------------
 df_long <- df %>%
   pivot_longer(
@@ -215,6 +215,7 @@ library(forcats)
 library(hrbrthemes)
 library(viridis)
 
+# we use a prebuilt dataset from github for representation of violin plot.
 # Load dataset from github
 data <- read.table("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/10_OneNumSevCatSubgroupsSevObs.csv", header=T, sep=",") %>%
   mutate(tip = round(tip/total_bill*100, 1))
@@ -256,6 +257,7 @@ This visualization uses bars to represent absolute values (e.g., counts) while o
 library(ggplot2)
 library(zoo)
 
+# for this combo we need to load a data which represents a balance between numerical and categorical columns, hence we choose "AirPassengers" data.
 data("AirPassengers")
 
 # Convert the AirPassengers time series into a data frame using as.yearmon for correct date conversion
