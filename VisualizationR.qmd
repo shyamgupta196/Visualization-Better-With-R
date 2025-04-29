@@ -58,10 +58,10 @@ A **swarm plot** is particularly useful when you want to display the distributio
 # --------------------------------------------------
 # Install/load the required packages (uncomment if needed)
 # --------------------------------------------------
-# install.packages("dplyr")
-# install.packages("tidyr")
-# install.packages("ggplot2")
-# install.packages("ggbeeswarm")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("ggplot2")
+install.packages("ggbeeswarm")
 
 library(dplyr)
 library(tidyr)
@@ -126,7 +126,7 @@ You want to see the distribution (shape, skew, modality) of a numerical variable
 
 ```{r}
 #| eval: true
-# install.packages("ggplot2")  # if not already installed
+install.packages("ggplot2")  # if not already installed
 library(ggplot2)
 library(dplyr)
 
@@ -252,8 +252,8 @@ This visualization uses bars to represent absolute values (e.g., counts) while o
 ```{r}
 #| eval: true
 # Load required libraries
-# install.packages("ggplot2") # if not installed
-# install.packages("zoo")    # if not installed
+install.packages("ggplot2") # if not installed
+install.packages("zoo")    # if not installed
 library(ggplot2)
 library(zoo)
 
@@ -299,7 +299,7 @@ This plot uses a color scale to indicate the strength and direction of correlati
 ```{r}
 #| eval: true
 
-# install.packages("corrplot")   # if not already installed
+install.packages("corrplot")   # if not already installed
 library(corrplot)
 
 # Calculate correlation matrix using numeric columns from the synthetic dataset
