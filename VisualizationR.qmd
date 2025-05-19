@@ -16,27 +16,27 @@ format:
     toc-depth: 3
     code-fold: true
 execute: 
+  eval: false
   warning: false
   message: false
   echo: true
-
 ---
 
 # Introduction
 
-I was working on a social science research project—trying to decode the relationship between people's well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story. 
+I was working on a social science research project—trying to decode the relationship between people's well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
-"I needed a better way to visualize my data to spot trends, patterns, and outliers". That is when my journey with data visualization in **R** began. 
-
+"I needed a better way to visualize my data to spot trends, patterns, and outliers". That is when my journey with data visualization in **R** began.
 
 ## Learning Objective
+
 In this tutorial, I'll walk you through the plots and visual techniques. I'll share each plot in the order I stumbled upon them, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
 
 By the end of this tutorial, you’ll have a handy arsenal of 5-8 powerful visualization techniques perfect for social science data exploration. Let’s get started!
 
 ### Duration
-Around 10-15 mins
 
+Around 10-15 mins
 
 ## 1. Swarm Plots over Scatter Plots
 
@@ -54,14 +54,14 @@ A **swarm plot** is particularly useful when you want to display the distributio
 - You want a more "transparent" view of the distribution than a box or violin plot alone can provide.
 
 ```{r}
-#| eval: true
+#| eval: false
 # --------------------------------------------------
 # Install/load the required packages (uncomment if needed)
 # --------------------------------------------------
-install.packages("dplyr")
-install.packages("tidyr")
-install.packages("ggplot2")
-install.packages("ggbeeswarm")
+# install.packages("dplyr")
+# install.packages("tidyr")
+# install.packages("ggplot2")
+# install.packages("ggbeeswarm")
 
 library(dplyr)
 library(tidyr)
@@ -110,6 +110,8 @@ ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
   )
 ```
 
+![](images/clipboard-4114810917.png)
+
 ## 2. Density Plots
 
 **The Discovery:**
@@ -125,8 +127,8 @@ A density plot provides a smoothed curve of the distribution. It’s like a refi
 You want to see the distribution (shape, skew, modality) of a numerical variable. You have one or more categorical variables to compare (e.g., group A vs. group B). A smoother visualization of distribution is more intuitive than a histogram.
 
 ```{r}
-#| eval: true
-install.packages("ggplot2")  # if not already installed
+#| eval: false
+# install.packages("ggplot2")  # if not already installed
 library(ggplot2)
 library(dplyr)
 
@@ -143,6 +145,8 @@ ggplot(df, aes(x = area_mean, fill = diagnosis)) +
   )
 
 ```
+
+![](images/clipboard-1017617827.png)
 
 ## 3. Box Plots w/ Jitter
 
@@ -164,7 +168,7 @@ By adding a jittered layer of points over the box plot, you get the best of both
 
 ```{R}
 #| echo: false
-#| eval: true
+#| eval: false
 library(tidyverse)
 library(hrbrthemes)
 library(viridis)
@@ -190,6 +194,8 @@ data %>%
     xlab("")
 ```
 
+![](images/clipboard-2625147668.png)
+
 ## 4. Violin Plot
 
 **The Discovery:**
@@ -207,7 +213,7 @@ Violin plots combine the ideas of a box plot and a density plot, giving you a wi
 -   Great for comparing multiple groups at once if you want a holistic view of the distribution.
 
 ```{R}
-#| eval: true
+#| eval: false
 # Libraries
 library(ggplot2)
 library(dplyr)
@@ -233,6 +239,8 @@ data %>%
     ylim(0,40)
 ```
 
+![](images/clipboard-404014277.png)
+
 ## 5. Bar + Line Plot
 
 **The Discovery:**
@@ -250,10 +258,10 @@ This visualization uses bars to represent absolute values (e.g., counts) while o
 -   When you need to understand the fluctuations and overall pattern over time.
 
 ```{r}
-#| eval: true
+#| eval: false
 # Load required libraries
-install.packages("ggplot2") # if not installed
-install.packages("zoo")    # if not installed
+# install.packages("ggplot2") # if not installed
+# install.packages("zoo")    # if not installed
 library(ggplot2)
 library(zoo)
 
@@ -280,6 +288,8 @@ ggplot(df_air, aes(x = Month)) +
 
 ```
 
+![](images/clipboard-2152316663.png)
+
 ## 6. Correlation Heatmap
 
 **The Discovery:**
@@ -297,9 +307,9 @@ This plot uses a color scale to indicate the strength and direction of correlati
 -   To quickly assess which pairs of variables have strong positive or negative correlations.
 
 ```{r}
-#| eval: true
+#| eval: false
 
-install.packages("corrplot")   # if not already installed
+# install.packages("corrplot")   # if not already installed
 library(corrplot)
 
 # Calculate correlation matrix using numeric columns from the synthetic dataset
@@ -314,6 +324,8 @@ corrplot(corr_matrix, method = "color", type = "upper",
          mar = c(0, 0, 2, 0))
 
 ```
+
+![](images/clipboard-3219877491.png)
 
 ## 7. Scatter Plot with Regression Line
 
@@ -332,7 +344,7 @@ Overlaying a linear regression line on a scatter plot can help you gauge the dir
 -   When you want a quick visual indication of a linear trend before engaging in deeper statistical testing.
 
 ```{r}
-#| eval: true
+#| eval: false
 
 # Reuse the synthetic dataset 'df'
 ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
@@ -346,6 +358,8 @@ ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
   theme_minimal()
 
 ```
+
+![](images/clipboard-903472186.png)
 
 ## 8. Stacked Bar Charts
 
@@ -364,7 +378,7 @@ This chart is effective for quickly comparing the contribution of sub-categories
 -   To compare not only overall counts but also the internal composition of each group.
 
 ```{r}
-#| eval: true
+#| eval: false
 
 # Create synthetic data for a stacked bar chart
 set.seed(123)
@@ -385,8 +399,10 @@ ggplot(df_stack, aes(x = Region, fill = Preference)) +
 
 ```
 
+![](images/clipboard-3079454312.png)
+
 ```{r}
-#| eval: true
+#| eval: false
 
 # Load required libraries for mapping
 library(ggplot2)
@@ -441,9 +457,13 @@ ggplot() +
 
 ```
 
+![](images/clipboard-2778311482.png)
+
+![](images/clipboard-3219471277.png)
+
 ## Conclusion
 
-With this tutorial now you have more weapons in your arsenal to use R and visualize better to draw insights from them. 
+With this tutorial now you have more weapons in your arsenal to use R and visualize better to draw insights from them.
 
 ## References and reading material -
 
