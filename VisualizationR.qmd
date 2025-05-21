@@ -110,7 +110,7 @@ ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
   )
 ```
 
-![](images/clipboard-4114810917.png)
+![](images/Screenshot 2025-05-22 at 01.22.31.png)
 
 ## 2. Density Plots
 
@@ -146,7 +146,7 @@ ggplot(df, aes(x = area_mean, fill = diagnosis)) +
 
 ```
 
-![](images/clipboard-1017617827.png)
+![](images/Screenshot 2025-05-22 at 01.23.05.png)
 
 ## 3. Box Plots w/ Jitter
 
@@ -194,7 +194,7 @@ data %>%
     xlab("")
 ```
 
-![](images/clipboard-2625147668.png)
+![](images/Screenshot 2025-05-22 at 01.23.40.png)
 
 ## 4. Violin Plot
 
@@ -239,7 +239,7 @@ data %>%
     ylim(0,40)
 ```
 
-![](images/clipboard-404014277.png)
+![](images/Screenshot 2025-05-22 at 01.23.54.png)
 
 ## 5. Bar + Line Plot
 
@@ -254,6 +254,8 @@ This visualization uses bars to represent absolute values (e.g., counts) while o
 **When to Use:**
 
 -   To show both individual period values (bars) and the overall trend (line) for time-series data.
+
+-   
 
 -   When you need to understand the fluctuations and overall pattern over time.
 
@@ -288,7 +290,7 @@ ggplot(df_air, aes(x = Month)) +
 
 ```
 
-![](images/clipboard-2152316663.png)
+![](images/Screenshot 2025-05-22 at 01.24.53.png)
 
 ## 6. Correlation Heatmap
 
@@ -325,7 +327,7 @@ corrplot(corr_matrix, method = "color", type = "upper",
 
 ```
 
-![](images/clipboard-3219877491.png)
+![](images/Screenshot 2025-05-22 at 01.25.29.png)
 
 ## 7. Scatter Plot with Regression Line
 
@@ -359,7 +361,7 @@ ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
 
 ```
 
-![](images/clipboard-903472186.png)
+![](images/Screenshot 2025-05-22 at 01.26.00.png)
 
 ## 8. Stacked Bar Charts
 
@@ -399,7 +401,7 @@ ggplot(df_stack, aes(x = Region, fill = Preference)) +
 
 ```
 
-![](images/clipboard-3079454312.png)
+![](images/Screenshot 2025-05-22 at 01.26.35.png)
 
 ```{r}
 #| eval: false
@@ -457,9 +459,9 @@ ggplot() +
 
 ```
 
-![](images/clipboard-2778311482.png)
+![](images/Screenshot 2025-05-22 at 01.31.38.png)
 
-![](images/clipboard-3219471277.png)
+![](images/Screenshot 2025-05-22 at 01.32.08.png)
 
 ## Conclusion
 
