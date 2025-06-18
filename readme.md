@@ -1,5 +1,5 @@
 # Visualize Better with R
-![](https://img.shields.io/badge/MethodsHub-Guidelines3.0-purple) 
+![](https://img.shields.io/badge/MethodsHub-Guidelines3.0-purple) ![](https://img.shields.io/badge/License-MIT-blue) ![](https://img.shields.io/badge/PR's-Welcome-lightgreen)
 
 **Author:** Shyam Gupta ([ORCID](https://orcid.org/0009-0003-4639-5618))  
 **Email:** shyam.gupta@gesis.org  
