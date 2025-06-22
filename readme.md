@@ -25,7 +25,7 @@ By the end of this tutorial, you’ll have a handy arsenal of 5–8 powerful vis
 
 ### Duration
 
-Around 10–15 mins
+Around 20–30 mins
 
 ---
 
