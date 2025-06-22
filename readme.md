@@ -84,6 +84,7 @@ ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
 ````
 
 ![](images/Screenshot_2025-05-22_at_01.22.31.png)
+<img width="843" alt="image" src="https://github.com/user-attachments/assets/3040f1b8-0d87-4144-95be-6c360db1cc29" />
 
 ---
 
@@ -114,8 +115,8 @@ ggplot(df, aes(x = area_mean, fill = diagnosis)) +
     fill  = "Group"
   )
 ```
+<img width="843" alt="image" src="https://github.com/user-attachments/assets/8ad738df-3386-41a5-8931-c608ab129b8e" />
 
-![](images/Screenshot_2025-05-22_at_01.23.05.png)
 
 ---
 
@@ -149,7 +150,7 @@ ggplot(data, aes(x = name, y = value, fill = name)) +
   theme(legend.position = "none")
 ```
 
-![](images/Screenshot_2025-05-22_at_01.23.40.png)
+<img width="843" alt="image" src="https://github.com/user-attachments/assets/e4bc737b-9bdf-4fee-9c73-55548497e8c3" />
 
 ---
 
@@ -182,8 +183,8 @@ ggplot(data, aes(x = fct_reorder(day, tip), y = tip, fill = sex)) +
   coord_cartesian(ylim = c(0, 40)) +
   theme_minimal()
 ```
+<img width="843" alt="image" src="https://github.com/user-attachments/assets/ea6b8e00-7eb9-4b43-8983-6e11a6b6a9fb" />
 
-![](images/Screenshot_2025-05-22_at_01.23.54.png)
 
 ---
 
@@ -221,7 +222,7 @@ ggplot(df_air, aes(x = Month)) +
   theme_minimal()
 ```
 
-![](images/Screenshot_2025-05-22_at_01.24.53.png)
+<img width="843" alt="image" src="https://github.com/user-attachments/assets/aaa9955b-7c6c-4273-9721-98e19e04f86b" />
 
 ---
 
@@ -255,8 +256,8 @@ corrplot(
   mar       = c(0,0,2,0)
 )
 ```
+<img width="778" alt="image" src="https://github.com/user-attachments/assets/61b8c043-1348-45db-b773-2ff7c1108be6" />
 
-![](images/Screenshot_2025-05-22_at_01.25.29.png)
 
 ---
 
@@ -284,8 +285,8 @@ ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
   ) +
   theme_minimal()
 ```
+<img width="790" alt="image" src="https://github.com/user-attachments/assets/af021ee0-a19a-460b-9baf-6cd624623634" />
 
-![](images/Screenshot_2025-05-22_at_01.26.00.png)
 
 ---
 
@@ -318,8 +319,8 @@ ggplot(df_stack, aes(x = Region, fill = Preference)) +
   ) +
   theme_minimal()
 ```
+<img width="790" alt="image" src="https://github.com/user-attachments/assets/038875a1-a8ae-4c8b-b6d7-ad713111c04d" />
 
-![](images/Screenshot_2025-05-22_at_01.26.35.png)
 
 ---
 
@@ -376,9 +377,8 @@ ggplot() +
     size  = "Event Count"
   )
 ```
-
-![](images/Screenshot_2025-05-22_at_01.31.38.png)
-![](images/Screenshot_2025-05-22_at_01.32.08.png)
+<img width="797" alt="image" src="https://github.com/user-attachments/assets/dfe0b73d-6fb3-4f17-bd81-9351c634b920" />
+<img width="797" alt="image" src="https://github.com/user-attachments/assets/ce89a182-dcbd-4712-89a3-ae33e032fdac" />
 
 ---
 
