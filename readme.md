@@ -10,7 +10,7 @@
 
 ---
 
-## Introduction
+## Description
 
 I was working on a social science research project—trying to decode the relationship between people’s well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
