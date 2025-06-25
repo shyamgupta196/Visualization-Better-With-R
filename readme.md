@@ -8,7 +8,7 @@
 **Date:** 2025-04-10  
 
 
----
+
 ### Learning Objective
 I was working on a social science research project—trying to decode the relationship between people’s well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
@@ -23,7 +23,7 @@ By the end of this tutorial, you’ll have a handy arsenal of 5–8 powerful vis
 
 Around 20–30 mins
 
----
+
 
 ## 1. Swarm Plots over Scatter Plots
 
@@ -82,7 +82,6 @@ ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
 ![](images/Screenshot_2025-05-22_at_01.22.31.png)
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/3040f1b8-0d87-4144-95be-6c360db1cc29" />
 
----
 
 ## 2. Density Plots
 
@@ -114,7 +113,7 @@ ggplot(df, aes(x = area_mean, fill = diagnosis)) +
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/8ad738df-3386-41a5-8931-c608ab129b8e" />
 
 
----
+
 
 ## 3. Box Plots with Jitter
 
@@ -148,7 +147,7 @@ ggplot(data, aes(x = name, y = value, fill = name)) +
 
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/e4bc737b-9bdf-4fee-9c73-55548497e8c3" />
 
----
+
 
 ## 4. Violin Plot
 
@@ -182,7 +181,7 @@ ggplot(data, aes(x = fct_reorder(day, tip), y = tip, fill = sex)) +
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/ea6b8e00-7eb9-4b43-8983-6e11a6b6a9fb" />
 
 
----
+
 
 ## 5. Bar + Line Plot
 
@@ -220,7 +219,7 @@ ggplot(df_air, aes(x = Month)) +
 
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/aaa9955b-7c6c-4273-9721-98e19e04f86b" />
 
----
+
 
 ## 6. Correlation Heatmap
 
@@ -255,7 +254,7 @@ corrplot(
 <img width="778" alt="image" src="https://github.com/user-attachments/assets/61b8c043-1348-45db-b773-2ff7c1108be6" />
 
 
----
+
 
 ## 7. Scatter Plot with Regression Line
 
@@ -284,7 +283,7 @@ ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
 <img width="790" alt="image" src="https://github.com/user-attachments/assets/af021ee0-a19a-460b-9baf-6cd624623634" />
 
 
----
+
 
 ## 8. Stacked Bar Charts
 
@@ -318,7 +317,7 @@ ggplot(df_stack, aes(x = Region, fill = Preference)) +
 <img width="790" alt="image" src="https://github.com/user-attachments/assets/038875a1-a8ae-4c8b-b6d7-ad713111c04d" />
 
 
----
+
 
 ## 9. Maps: Choropleth & Point Map
 
@@ -376,13 +375,11 @@ ggplot() +
 <img width="797" alt="image" src="https://github.com/user-attachments/assets/dfe0b73d-6fb3-4f17-bd81-9351c634b920" />
 <img width="797" alt="image" src="https://github.com/user-attachments/assets/ce89a182-dcbd-4712-89a3-ae33e032fdac" />
 
----
+
 
 ## Conclusion
 
 With this tutorial, you now have more weapons in your arsenal to use R and visualize better to draw insights from your data.
-
----
 
 ## References and Reading Material
 
