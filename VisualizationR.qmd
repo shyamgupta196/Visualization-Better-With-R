@@ -481,3 +481,6 @@ With this tutorial now you have more weapons in your arsenal to use R and visual
 -   **R for Data Science** (Wickham & Grolemund) – A comprehensive guide on data manipulation and visualization in R.
 
 -   **Data to Viz** – [Data to Viz](https://www.data-to-viz.com/) for insights on selecting the right chart type.
+
+## Contact Details
+shyam.gupta@gesis.org
