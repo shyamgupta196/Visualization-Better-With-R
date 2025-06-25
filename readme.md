@@ -9,15 +9,11 @@
 
 
 ---
-
-## Description
-
+### Learning Objective
 I was working on a social science research project—trying to decode the relationship between people’s well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
 > “I needed a better way to visualize my data to spot trends, patterns, and outliers.”  
 > That is when my journey with data visualization in **R** began.
-
-### Learning Objective
 
 In this tutorial, I’ll walk you through the plots and visual techniques. I’ll share each plot in the order I stumbled upon them, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
 
