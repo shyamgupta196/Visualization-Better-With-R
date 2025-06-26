@@ -21,6 +21,7 @@ execute:
   message: false
   echo: true
 ---
+
 [![MethodsHub❤️ Guidelines](https://img.shields.io/badge/MethodsHub_Tutorial-GuidelinesV3-lightblue)](https://github.com/GESIS-Methods-Hub/guidelines-for-tutorials)
  ![](https://img.shields.io/badge/License-MIT-blue)
 # Introduction
