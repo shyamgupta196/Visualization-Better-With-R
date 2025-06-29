@@ -1,20 +1,20 @@
 ---
 title: "Visualize Better with R"
-author:
+author: 
   name:
-     given: "Shyam Gupta"
+    given: "Shyam Gupta"
   email: shyam.gupta@gesis.org
   orcid: https://orcid.org/0009-0003-4639-5618
   affiliations:
     - name: GESIS Leibniz Institute for the Social Sciences
 
-    
 date: "2025-04-10"
 format: 
   html: 
     toc: true
     toc-depth: 3
     code-fold: true
+
 execute: 
   eval: false
   warning: false
