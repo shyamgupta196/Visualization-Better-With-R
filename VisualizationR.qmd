@@ -78,13 +78,42 @@ install.packages("viridis")     # for color scales on maps
 install.packages("viridisLite")
 
 
-### Estimated Duration
+## Estimated Duration
 
 - **Reading & Setup:** 5 minutes
 - **Code Walkthrough:** 20–30 minutes
 - **Hands-on Practice:** 10–15 minutes
 
 Total: **35–50 minutes**
+
+## Input Data
+
+```
+# 1. Generate synthetic dataset
+set.seed(42)
+df <- data.frame(
+  radius_mean    = runif(100, min = 12, max = 16),
+  texture_mean   = runif(100, min = 15, max = 25),
+  perimeter_mean = runif(100, min = 70, max = 110),
+  area_mean      = runif(100, min = 350, max = 750),
+  concavity_mean = runif(100, min = 0.1, max = 0.5),
+  symmetry_mean  = runif(100, min = 0.15, max = 0.25),
+  diagnosis      = sample(c("Group A", "Group B"), 100, replace = TRUE)
+)
+
+# 2. Reshape data from wide to long format
+#    - pivot_longer(): collapse multiple feature columns into key-value pairs
+
+
+df_long <- df %>%
+  pivot_longer(
+    cols = radius_mean:symmetry_mean,
+    names_to = "feature",
+    values_to = "value"
+  )
+```
+
+
 
 # 1. Swarm Plots over Scatter Plots
 
@@ -99,33 +128,10 @@ library(dplyr)       # Data manipulation
 library(tidyr)       # Data reshaping
 library(ggplot2)     # Core plotting package
 library(ggbeeswarm)  # For geom_beeswarm()
-
-# 2. Generate synthetic dataset
-set.seed(42)
-df <- data.frame(
-  radius_mean    = runif(100, min = 12, max = 16),
-  texture_mean   = runif(100, min = 15, max = 25),
-  perimeter_mean = runif(100, min = 70, max = 110),
-  area_mean      = runif(100, min = 350, max = 750),
-  concavity_mean = runif(100, min = 0.1, max = 0.5),
-  symmetry_mean  = runif(100, min = 0.15, max = 0.25),
-  diagnosis      = sample(c("Group A", "Group B"), 100, replace = TRUE)
-)
-
-# 3. Reshape data from wide to long format
-#    - pivot_longer(): collapse multiple feature columns into key-value pairs
-
-
-df_long <- df %>%
-  pivot_longer(
-    cols = radius_mean:symmetry_mean,
-    names_to = "feature",
-    values_to = "value"
-  )
 ```
 
 ```{r swarm-plot, fig.width=7, fig.height=5}
-# 4. Create a swarm plot
+# 2. Create a swarm plot
 #    - aes(x=feature, y=value): map feature names on x-axis and values on y-axis
 #    - color by diagnosis group
 
@@ -223,7 +229,6 @@ Boxplots summarize distribution via quartiles, but hide individual points. Addin
 
 ```{r boxjitter-setup, message=FALSE}
 library(ggplot2)
-
 # Simulate data with varied group sizes
 set.seed(123)
 data_box <- data.frame(
@@ -326,7 +331,7 @@ print(violin_plot)
 Combining bars (absolute values) with a line (trend) highlights both period-specific counts and overall trajectory in time-series data.
 
 ## 5.2 Step-by-Step Code
-
+Loading the air passengers dataset.
 ```{r barline-setup, message=FALSE}
 library(ggplot2)
 library(zoo)
@@ -337,7 +342,7 @@ df_air <- data.frame(
   Passengers = as.numeric(AirPassengers)
 )
 ```
-
+Now we plot the Bar + Line Combo Plot.
 ```{r barline-plot, fig.width=7, fig.height=5}
 # Create bar + line chart
 ggplot(df_air, aes(x = Month)) +
