@@ -21,6 +21,7 @@ execute:
 
 [![MethodsHub❤️ Guidelines](https://img.shields.io/badge/MethodsHub_Tutorial-GuidelinesV3-lightblue)](https://github.com/GESIS-Methods-Hub/guidelines-for-tutorials) ![](https://img.shields.io/badge/License-MIT-blue) ![](https://img.shields.io/badge/PR's-Welcome-lightgreen)
 
+## Learning Objective
 I was working on a social science research project—trying to decode the relationship between people’s well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
 > “I needed a better way to visualize my data to spot trends, patterns, and outliers.”  
@@ -37,14 +38,14 @@ In this tutorial, I’ll walk you through the plots and visual techniques. I’l
 
 By the end of this tutorial, you’ll have a handy arsenal of 9 powerful visualization techniques perfect for social science data exploration. Let’s get started!
 
-## Learning Objective
+## Target Audience
 
-By completing this tutorial, you will:
+This tutorial is designed for:
 
-1. Understand the strengths and limitations of each visualization type.
-2. Be able to implement and customize these visualizations in `ggplot2` and related packages.
-3. Interpret results in the context of social science data exploration.
-4. Apply best practices to ensure clarity, accessibility, and reproducibility of your plots.
+- **Social Science Researchers & Graduate Students:** Those analyzing survey or observational data who need clear, reproducible visualizations to support hypotheses and publications.
+- **Data Analysts & Statisticians:** Professionals exploring complex datasets in R who want to expand their toolbox with advanced plotting techniques.
+- **Academic Instructors & Educators:** Teachers seeking structured examples to demonstrate best practices in data visualization to social science students.
+- **Interdisciplinary Teams & Policy Analysts:** Practitioners who require accessible, publication-quality figures to communicate insights to stakeholders and decision-makers.
 
 ### Estimated Duration
 
