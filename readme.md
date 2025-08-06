@@ -15,15 +15,24 @@ I was working on a social science research project—trying to decode the relati
 > “I needed a better way to visualize my data to spot trends, patterns, and outliers.”  
 > That is when my journey with data visualization in **R** began.
 
+By completing this tutorial, you will:
+
+1. Understand the strengths and limitations of each visualization type.
+2. Be able to implement and customize these visualizations in `ggplot2` and related packages.
+3. Interpret results in the context of social science data exploration.
+4. Apply best practices to ensure clarity, accessibility, and reproducibility of your plots.
+
 In this tutorial, I’ll walk you through the plots and visual techniques. I’ll share each plot in the order I stumbled upon them, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
 
-By the end of this tutorial, you’ll have a handy arsenal of 5–8 powerful visualization techniques perfect for social science data exploration. Let’s get started!
+By the end of this tutorial, you’ll have a handy arsenal of 9 powerful visualization techniques perfect for social science data exploration. Let’s get started!
 
 ### Duration
 
-Around 20–30 mins
+- **Reading & Setup:** 5 minutes
+- **Code Walkthrough:** 20–30 minutes
+- **Hands-on Practice:** 10–15 minutes
 
-
+Total: **35–50 minutes**
 
 ## 1. Swarm Plots over Scatter Plots
 
@@ -387,4 +396,5 @@ With this tutorial, you now have more weapons in your arsenal to use R and visua
 * **Mental Health Viz** – [Kaggle Notebook](https://www.kaggle.com/code/melissamonfared/mental-health-music-relationship-analysis-eda)
 * **R for Data Science** (Wickham & Grolemund) – A comprehensive guide on data manipulation and visualization in R.
 * **Data to Viz** – [data-to-viz.com](https://www.data-to-viz.com/) for insights on selecting the right chart type.
+
 
