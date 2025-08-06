@@ -22,17 +22,82 @@ By completing this tutorial, you will:
 3. Interpret results in the context of social science data exploration.
 4. Apply best practices to ensure clarity, accessibility, and reproducibility of your plots.
 
-In this tutorial, I’ll walk you through the plots and visual techniques. I’ll share each plot in the order I stumbled upon them, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
+In this tutorial, I’ll walk you through the plots and visual techniques. I’ll share each plot, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
 
 By the end of this tutorial, you’ll have a handy arsenal of 9 powerful visualization techniques perfect for social science data exploration. Let’s get started!
 
-### Duration
+## Target Audience
+
+This tutorial is designed for:
+
+- **Social Science Researchers & Graduate Students:** Those analyzing survey or observational data who need clear, reproducible visualizations to support hypotheses and publications.
+- **Data Analysts & Statisticians:** Professionals exploring complex datasets in R who want to expand their toolbox with advanced plotting techniques.
+- **Academic Instructors & Educators:** Teachers seeking structured examples to demonstrate best practices in data visualization to social science students.
+- **Interdisciplinary Teams & Policy Analysts:** Practitioners who require accessible, publication-quality figures to communicate insights to stakeholders and decision-makers.
+
+## Computational Environment Setup
+
+Ensure you have **R (version 3.6.0 or higher)** installed on your system.  
+You can download it from: https://cran.r-project.org/.
+
+Install the required R packages by running:
+
+```r
+# Core data wrangling & plotting
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("hrbrthemes")
+install.packages("ggplot2")
+
+# Specialized geoms
+install.packages("ggbeeswarm")
+install.packages("forcats")
+
+# Time series utilities
+install.packages("zoo")
+
+# Correlation plotting
+install.packages("corrplot")
+
+# Mapping
+install.packages("maps")
+install.packages("viridis")     # for color scales on maps
+
+# (Optional) Color‐blind–friendly palettes
+install.packages("viridisLite")
+```
+
+## Duration
 
 - **Reading & Setup:** 5 minutes
 - **Code Walkthrough:** 20–30 minutes
 - **Hands-on Practice:** 10–15 minutes
 
 Total: **35–50 minutes**
+
+## Input Data
+
+#### Generate a toy dataset with two features and a group indicator
+```
+set.seed(42)
+df <- data.frame(
+  radius_mean    = runif(100, 12, 16),
+  texture_mean   = runif(100, 15, 25),
+  perimeter_mean = runif(100, 70, 110),
+  area_mean      = runif(100, 350, 750),
+  concavity_mean = runif(100, 0.1, 0.5),
+  symmetry_mean  = runif(100, 0.15, 0.25),
+  diagnosis      = sample(c("Group A", "Group B"), 100, TRUE)
+)
+
+df_long <- df %>%
+  pivot_longer(
+    radius_mean:symmetry_mean,
+    names_to  = "feature",
+    values_to = "value"
+  )
+```
+
 
 ## 1. Swarm Plots over Scatter Plots
 
@@ -55,24 +120,6 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggbeeswarm)
-
-set.seed(42)
-df <- data.frame(
-  radius_mean    = runif(100, 12, 16),
-  texture_mean   = runif(100, 15, 25),
-  perimeter_mean = runif(100, 70, 110),
-  area_mean      = runif(100, 350, 750),
-  concavity_mean = runif(100, 0.1, 0.5),
-  symmetry_mean  = runif(100, 0.15, 0.25),
-  diagnosis      = sample(c("Group A", "Group B"), 100, TRUE)
-)
-
-df_long <- df %>%
-  pivot_longer(
-    radius_mean:symmetry_mean,
-    names_to  = "feature",
-    values_to = "value"
-  )
 
 ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
   geom_beeswarm(size = 1.5, cex = 1) +
