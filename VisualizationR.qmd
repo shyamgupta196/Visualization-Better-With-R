@@ -57,6 +57,7 @@ Install the required R packages by running:
 ```r
 # Core data wrangling & plotting
 install.packages("dplyr")
+install.packages("hrbrthemes")
 install.packages("tidyr")
 install.packages("ggplot2")
 
