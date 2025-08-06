@@ -21,15 +21,21 @@ execute:
 
 [![MethodsHub❤️ Guidelines](https://img.shields.io/badge/MethodsHub_Tutorial-GuidelinesV3-lightblue)](https://github.com/GESIS-Methods-Hub/guidelines-for-tutorials) ![](https://img.shields.io/badge/License-MIT-blue) ![](https://img.shields.io/badge/PR's-Welcome-lightgreen)
 
-In social science research, the power of visualization cannot be overstated. Properly designed graphs not only reveal underlying patterns, outliers, and trends, but also communicate complex insights to diverse audiences. In this tutorial, we will explore nine advanced visualization techniques in R, each accompanied by:
+I was working on a social science research project—trying to decode the relationship between people’s well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
-- **Context and Motivation:** Why this chart type matters in social science.
-- **Step-by-Step Explanation:** What each line of code does.
-- **Customization Tips:** How to adjust aesthetics, themes, and parameters.
-- **Interpretation Guide:** How to read and discuss results.
-- **Best Practices & Pitfalls:** Common mistakes and how to avoid them.
+> “I needed a better way to visualize my data to spot trends, patterns, and outliers.”  
+> That is when my journey with data visualization in **R** began.
 
-With these tools and guidelines, you'll be equipped to craft publication-ready figures for your next research article, presentation, or report.
+By completing this tutorial, you will:
+
+1. Understand the strengths and limitations of each visualization type.
+2. Be able to implement and customize these visualizations in `ggplot2` and related packages.
+3. Interpret results in the context of social science data exploration.
+4. Apply best practices to ensure clarity, accessibility, and reproducibility of your plots.
+
+In this tutorial, I’ll walk you through the plots and visual techniques. I’ll share each plot, explaining *why* you might want to use them, *what* they reveal, and *how* to make them.
+
+By the end of this tutorial, you’ll have a handy arsenal of 9 powerful visualization techniques perfect for social science data exploration. Let’s get started!
 
 ## Learning Objective
 
