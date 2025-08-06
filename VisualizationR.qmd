@@ -77,7 +77,7 @@ install.packages("viridis")     # for color scales on maps
 
 # (Optional) Color‐blind–friendly palettes
 install.packages("viridisLite")
-
+```
 
 ## Estimated Duration
 
