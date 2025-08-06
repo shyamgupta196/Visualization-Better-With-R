@@ -10,7 +10,7 @@ format:
   html:
     toc: true       # Generate table of contents automatically
     toc-depth: 4    # Include up to 4 header levels in TOC
-    code-fold: true # Allow folding of code chunks in HTML output
+    code-fold: false # Allow folding of code chunks in HTML output
     theme: cosmo    # Use Bootswatch Cosmo theme for a clean look
 execute:
   eval: false      # Do not execute code by default
