@@ -90,23 +90,42 @@ Total: **35–50 minutes**
 ## Input Data
 
 ```{r}
-# 1. Generate synthetic dataset
+# 1. load necessary libraries 
+
+library(dplyr)       # Data manipulation
+library(tidyr)       # Data reshaping
+library(ggplot2)     # Core plotting package
+library(ggbeeswarm)  # For geom_beeswarm()
+```
+
+# 2. Generate synthetic dataset
 
 set.seed(42)
+n <- 100
+diagnosis <- sample(c("Group A", "Group B"), n, replace = TRUE)
+
+# Group-specific means and correlations
+radius_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 14, 15), sd = 0.7)
+texture_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 18, 22), sd = 2)
+perimeter_mean <- radius_mean * 6 + rnorm(n, 0, 3) # correlated with radius
+area_mean <- radius_mean^2 * pi + rnorm(n, 0, 30)  # correlated with radius
+concavity_mean <- rbeta(n, shape1 = ifelse(diagnosis == "Group A", 2, 4), shape2 = 10)
+
 df <- data.frame(
-  radius_mean    = runif(100, min = 12, max = 16),
-  texture_mean   = runif(100, min = 15, max = 25),
-  perimeter_mean = runif(100, min = 70, max = 110),
-  area_mean      = runif(100, min = 350, max = 750),
-  concavity_mean = runif(100, min = 0.1, max = 0.5),
-  symmetry_mean  = runif(100, min = 0.15, max = 0.25),
-  diagnosis      = sample(c("Group A", "Group B"), 100, replace = TRUE)
+  radius_mean = radius_mean,
+  texture_mean = texture_mean,
+  perimeter_mean = perimeter_mean,
+  area_mean = area_mean,
+  concavity_mean = concavity_mean,
+  symmetry_mean = symmetry_mean,
+  diagnosis = diagnosis
 )
 
 # 2. Reshape data from wide to long format
+# data before reshaping
+head(df)
 
 #    - pivot_longer(): collapse multiple feature columns into key-value pairs
-
 
 df_long <- df %>%
   pivot_longer(
@@ -114,9 +133,10 @@ df_long <- df %>%
     names_to = "feature",
     values_to = "value"
   )
+
+# data after reshaping
+head(df_long)
 ```
-
-
 
 # 1. Swarm Plots over Scatter Plots
 
@@ -125,51 +145,64 @@ When comparing numerical values across categories (e.g., satisfaction scores by 
 
 ## 1.2 Step-by-Step Code
 
-```{r swarm-setup, message=FALSE, warning=FALSE}
-# 1. Load necessary libraries
-library(dplyr)       # Data manipulation
-library(tidyr)       # Data reshaping
-library(ggplot2)     # Core plotting package
-library(ggbeeswarm)  # For geom_beeswarm()
-```
-
 ```{r swarm-plot, fig.width=7, fig.height=5}
 # 2. Create a swarm plot
 #    - aes(x=feature, y=value): map feature names on x-axis and values on y-axis
 #    - color by diagnosis group
 
+# Swarm plot
 swarm_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
-  geom_beeswarm(alpha = 0.8, size = 2) + # geom_beeswarm arranges points to avoid overlap
-  theme_minimal(base_size = 14) +        # clean background
+  geom_beeswarm(alpha = 0.8, size = 2) +
+  theme_minimal(base_size = 14) +
   labs(
-    title = "Distribution of Mean Features by Diagnosis Group",
+    title = "Swarm Plot: Distribution of Mean Features by Diagnosis Group",
     subtitle = "Swarm plot reveals every individual observation without overlap",
     x = "Feature",
     y = "Value",
     color = "Diagnosis Group"
   ) +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1), # rotate x-axis labels
+    axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "top"
   )
-
 print(swarm_plot)
+
+# Scatter plot for comparison
+scatter_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
+  geom_point(alpha = 0.8, size = 2, position = position_jitter(width = 0)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Scatter Plot: Distribution of Mean Features by Diagnosis Group",
+    subtitle = "Scatter plot suffers from overplotting—points overlap and hide density",
+    x = "Feature",
+    y = "Value",
+    color = "Diagnosis Group"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+print(scatter_plot)
+
 ```
 
-## 1.3 Explanation & Interpretation
+## 1.3 interpretation of why choose swarm plot over scatter plot 
+
+
+## 1.4 Explanation & Interpretation
 
 - **geom_beeswarm():** Positions points in a compact, non-overlapping arrangement. Useful for moderate sample sizes (<200).  
 - **Transparency (`alpha`):** Helps reveal point density when slight overlap occurs.  
 
 **Interpretation:** In the resulting plot, clusters of points indicate where many observations fall. Differences in the vertical spread between Group A and Group B highlight variability in that feature.
 
-## 1.4 Customization Tips
+## 1.5 Customization Tips
 
 - **Point shape & size:** use `shape=` and `size=` inside `geom_beeswarm()`.  
 - **Color palettes:** integrate `scale_color_brewer(palette = "Set1")` or `scale_color_viridis_d()` for colorblind-friendly palettes.  
 - **Grouping multiple categories:** for more than two groups, ensure contrast in color or shape.
 
-## 1.5 Common Pitfalls
+## 1.6 Common Pitfalls
 
 - **Large datasets:** for >500 points, swarm plots can become cluttered; consider violin or box plots instead.  
 - **Uneven group sizes:** extremely small groups may appear as lone points; annotate directly if needed.
