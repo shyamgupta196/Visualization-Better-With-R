@@ -215,11 +215,6 @@ Histograms show frequency distribution through bars, but bin choice can obscure 
 
 ## 2.2 Step-by-Step Code
 
-```{r density-setup, message=FALSE}
-library(ggplot2)
-# assuming `df` from section 1 is available
-```
-
 ```{r density-plot, fig.width=7, fig.height=5}
 # Create density plot
 
