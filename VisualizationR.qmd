@@ -54,7 +54,7 @@ You can download it from: https://cran.r-project.org/.
 
 Install the required R packages by running:
 
-```r
+```{r}
 # Core data wrangling & plotting
 install.packages("dplyr")
 install.packages("hrbrthemes")
@@ -346,7 +346,7 @@ df_air <- data.frame(
 )
 ```
 Now we plot the Bar + Line Combo Plot.
-```{r barline-plot, fig.width=7, fig.height=5}
+```{{}r barline-plot, fig.width=7, fig.height=5}
 # Create bar + line chart
 ggplot(df_air, aes(x = Month)) +
   geom_col(aes(y = Passengers), width = 25, fill = "steelblue", alpha = 0.7) +
@@ -360,8 +360,8 @@ ggplot(df_air, aes(x = Month)) +
   scale_x_date(date_labels = "%Y-%m", date_breaks = "1 year") +
   theme_minimal(base_size = 14) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
+```{
+}
 ## 5.3 Explanation & Interpretation
 
 - **geom_col():** Creates bars using data values directly.  
@@ -387,15 +387,15 @@ When exploring relationships among many numerical variables, a correlation matri
 
 ## 6.2 Step-by-Step Code
 
-```{r corr-setup, message=FALSE}
+```{{}r corr-setup, message=FALSE}
 library(corrplot)
 
 # Use `df` from section 1: numeric columns only
 num_cols <- df %>% select(radius_mean, texture_mean, perimeter_mean, area_mean, concavity_mean, symmetry_mean)
 corr_matrix <- cor(num_cols)
-```
-
-```{r corr-plot, fig.width=6, fig.height=6}
+```{
+}
+```{{}r corr-plot, fig.width=6, fig.height=6}
 corrplot(
   corr_matrix,
   method = "shade",       # use shaded squares
@@ -407,8 +407,8 @@ corrplot(
   title = "Correlation Heatmap of Synthetic Features",
   mar = c(0, 0, 2, 0)        # margin for title
 )
-```
-
+```{
+}
 ## 6.3 Explanation & Interpretation
 
 - **method:** defines tile style (`shade`, `color`, `circle`).  
@@ -435,12 +435,12 @@ Scatter plots reveal relationships between two continuous variables. Overlaying 
 
 ## 7.2 Step-by-Step Code
 
-```{r scatter-setup, message=FALSE}
+```{{}r scatter-setup, message=FALSE}
 # Reuse `df` from section 1
 ggplot2::theme_set(theme_minimal(base_size = 14))
-```
-
-```{r scatter-plot, fig.width=7, fig.height=5}
+```{
+}
+```{{}r scatter-plot, fig.width=7, fig.height=5}
 scatter_reg <- ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
   geom_point(alpha = 0.7, size = 2) +
   geom_smooth(method = "lm", se = TRUE, linetype = "dashed") +
@@ -453,8 +453,8 @@ scatter_reg <- ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)
   )
 
 print(scatter_reg)
-```
-
+```{
+}
 ## 7.3 Explanation & Interpretation
 
 - **geom_smooth(method = 'lm', se = TRUE):** adds linear model fit with shaded confidence band.  
@@ -479,15 +479,15 @@ Stacked bar charts show total counts per category and the composition of subgrou
 
 ## 8.2 Step-by-Step Code
 
-```{r stacked-setup, message=FALSE}
+```{{}r stacked-setup, message=FALSE}
 set.seed(123)
 df_stack <- data.frame(
   Region = sample(c("North", "South", "East", "West"), 200, replace = TRUE),
   Preference = sample(c("Support", "Oppose", "Neutral"), 200, replace = TRUE)
 )
-```
-
-```{r stacked-plot, fig.width=7, fig.height=5}
+```{
+}
+```{{}r stacked-plot, fig.width=7, fig.height=5}
 stacked_bar <- ggplot(df_stack, aes(x = Region, fill = Preference)) +
   geom_bar(position = "stack") +
   labs(
@@ -500,8 +500,8 @@ stacked_bar <- ggplot(df_stack, aes(x = Region, fill = Preference)) +
   theme_minimal(base_size = 14)
 
 print(stacked_bar)
-```
-
+```{
+}
 ## 8.3 Explanation & Interpretation
 
 - **position = 'stack':** default stacking of bars.  
@@ -526,7 +526,7 @@ Spatial visualizations reveal geographic patterns. Choropleth maps color regions
 
 ## 9.2 Step-by-Step Code for US Choropleth
 
-```{r map-setup, message=FALSE}
+```{{}r map-setup, message=FALSE}
 library(ggplot2)
 library(maps)
 library(dplyr)
@@ -542,9 +542,9 @@ state_data <- data.frame(
 
 # Merge map coordinates with social index
 us_data <- left_join(states_map, state_data, by = "region")
-```
-
-```{r choropleth-plot, fig.width=7, fig.height=5}
+```{
+}
+```{{}r choropleth-plot, fig.width=7, fig.height=5}
 choropleth <- ggplot(us_data, aes(x = long, y = lat, group = group, fill = social_index)) +
   geom_polygon(color = "white") +
   coord_fixed(1.3) +
@@ -562,8 +562,8 @@ choropleth <- ggplot(us_data, aes(x = long, y = lat, group = group, fill = socia
   )
 
 print(choropleth)
-```
-
+```{
+}
 ## 9.3 Explanation & Interpretation
 
 - **coord_fixed(1.3):** ensures correct aspect ratio for maps.  
@@ -573,7 +573,7 @@ print(choropleth)
 
 ## 9.4 Step-by-Step Code for World Point Map
 
-```{r pointmap-plot, fig.width=7, fig.height=5}
+```{{}r pointmap-plot, fig.width=7, fig.height=5}
 # Load world map data
 world_map <- map_data("world")
 
@@ -612,8 +612,8 @@ point_map <- ggplot() +
   )
 
 print(point_map)
-```
-
+```{
+}
 ## 9.5 Customization Tips
 
 - Use `coord_quickmap()` for faster rendering on large world datasets.  

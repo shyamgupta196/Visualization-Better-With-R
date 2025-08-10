@@ -42,7 +42,7 @@ You can download it from: https://cran.r-project.org/.
 
 Install the required R packages by running:
 
-```r
+```{r}
 # Core data wrangling & plotting
 install.packages("dplyr")
 install.packages("tidyr")
@@ -78,7 +78,7 @@ Total: **35–50 minutes**
 ## Input Data
 
 #### Generate a toy dataset with two features and a group indicator
-```
+```{r}
 set.seed(42)
 df <- data.frame(
   radius_mean    = runif(100, 12, 16),
@@ -112,7 +112,7 @@ A **swarm plot** is useful when you want to display the distribution of a numeri
 - You want to see each individual data point by category.  
 - You want a more “transparent” view of the distribution than a box or violin plot alone can provide.
 
-```r
+```{r}
 # Install/load the required packages (uncomment if needed)
 # install.packages(c("dplyr","tidyr","ggplot2","ggbeeswarm"))
 
@@ -153,7 +153,7 @@ A density plot provides a smoothed curve of the distribution. It’s like a refi
 * You have one or more categorical variables to compare (e.g., Group A vs. Group B).
 * A smoother visualization of distribution is more intuitive than a histogram.
 
-```r
+```{{}r}
 library(ggplot2)
 # Using `df` from above
 ggplot(df, aes(x = area_mean, fill = diagnosis)) +
@@ -165,8 +165,8 @@ ggplot(df, aes(x = area_mean, fill = diagnosis)) +
     y     = "Density",
     fill  = "Group"
   )
-```
-<img width="843" alt="image" src="https://github.com/user-attachments/assets/8ad738df-3386-41a5-8931-c608ab129b8e" />
+```{
+}<img width="843" alt="image" src="https://github.com/user-attachments/assets/8ad738df-3386-41a5-8931-c608ab129b8e" />
 
 
 
@@ -185,7 +185,7 @@ By adding a jittered layer of points over the box plot, you get summary statisti
 * You want summary statistics plus raw data.
 * You’re dealing with moderate sample sizes.
 
-```r
+```{r}
 library(ggplot2)
 set.seed(123)
 data <- data.frame(
@@ -251,7 +251,7 @@ Use bars for absolute values and overlay a line to depict the trend over time.
 
 * Showing period values (bars) and overall trend (line) for time-series data.
 
-```r
+```{r}
 library(ggplot2)
 library(zoo)
 
@@ -290,7 +290,7 @@ A color-scaled matrix showing strength and direction of correlations.
 * Dealing with multiple numerical variables.
 * Quickly assessing which pairs are highly correlated.
 
-```r
+```{r}
 library(corrplot)
 
 num_cols    <- c("radius_mean","texture_mean","perimeter_mean",
@@ -325,7 +325,7 @@ Overlay a linear regression line on a scatter plot to gauge trend direction and 
 * Examining relationship between two numerical variables.
 * Getting a quick visual indication of a linear trend.
 
-```r
+```{r}
 ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
   geom_point(size = 2, alpha = 0.7) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -354,7 +354,7 @@ Compares total counts and internal composition of each group.
 * You have two or more categorical variables.
 * You want overall counts and proportional breakdown.
 
-```r
+```{r}
 set.seed(123)
 df_stack <- data.frame(
   Region     = sample(c("North","South","East","West"), 200, TRUE),
