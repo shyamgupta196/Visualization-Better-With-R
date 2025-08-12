@@ -367,6 +367,7 @@ print(violin_plot)
 
 
 # 5. Bar + Line Combo Plot
+When analyzing time-series survey data (e.g., monthly participant counts), I wanted both bar-chart values and a trend line.
 
 ## 5.1 Context and Motivation
 Combining bars (absolute values) with a line (trend) highlights both period-specific counts and overall trajectory in time-series data.
