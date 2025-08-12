@@ -719,5 +719,8 @@ Use these techniques as a foundation. Customize further with color palettes, the
 * **R for Data Science** (Wickham & Grolemund) – A comprehensive guide on data manipulation and visualization in R.
 * **Data to Viz** – [data-to-viz.com](https://www.data-to-viz.com/) for insights on selecting the right chart type.
 
+## Contact
+
+Questions? Reach out at shyam.gupta@gesis.org
 
 
