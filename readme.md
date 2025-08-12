@@ -103,6 +103,7 @@ texture_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 18, 22), sd = 2)
 perimeter_mean <- radius_mean * 6 + rnorm(n, 0, 3) # correlated with radius
 area_mean <- radius_mean^2 * pi + rnorm(n, 0, 30)  # correlated with radius
 concavity_mean <- rbeta(n, shape1 = ifelse(diagnosis == "Group A", 2, 4), shape2 = 10)
+symmetry_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 0.18, 0.22), sd = 0.03)
 
 df <- data.frame(
   radius_mean = radius_mean,
@@ -187,8 +188,7 @@ scatter_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) 
 print(scatter_plot)
 ```
 
-![](images/Screenshot_2025-05-22_at_01.22.31.png)
-<img width="843" alt="image" src="https://github.com/user-attachments/assets/3040f1b8-0d87-4144-95be-6c360db1cc29" />
+![alt text](image-8.png)
 ![](image.png)
 
 ### interpretation of why choose swarm plot over scatter plot 
@@ -306,7 +306,6 @@ box_jitter <- ggplot(data_box, aes(x = region, y = score, fill = region)) +
 print(box_jitter)
 ```
 
-<img width="843" alt="image" src="https://github.com/user-attachments/assets/e4bc737b-9bdf-4fee-9c73-55548497e8c3" />
 
 ![alt text](image-1.png)
 
@@ -551,26 +550,30 @@ Compares total counts and internal composition of each group.
 * You have two or more categorical variables.
 * You want overall counts and proportional breakdown.
 
-```{r}
+
+```{r stacked-setup, message=FALSE}
 set.seed(123)
 df_stack <- data.frame(
-  Region     = sample(c("North","South","East","West"), 200, TRUE),
-  Preference = sample(c("Support","Oppose","Neutral"), 200, TRUE)
+  Region = sample(c("North", "South", "East", "West"), 200, replace = TRUE),
+  Preference = sample(c("Support", "Oppose", "Neutral"), 200, replace = TRUE)
 )
+```
 
-ggplot(df_stack, aes(x = Region, fill = Preference)) +
+```{r stacked-plot, fig.width=7, fig.height=5}
+stacked_bar <- ggplot(df_stack, aes(x = Region, fill = Preference)) +
   geom_bar(position = "stack") +
   labs(
-    title = "Stacked Bar Chart of Preferences by Region",
-    x     = "Region",
-    y     = "Count"
+    title = "Stacked Bar Chart: Preference by Region",
+    subtitle = "Shows both total counts and subgroup composition",
+    x = "Region",
+    y = "Count",
+    fill = "Preference"
   ) +
-  theme_minimal()
+  theme_minimal(base_size = 14)
+
+print(stacked_bar)
 ```
-<img width="790" alt="image" src="https://github.com/user-attachments/assets/038875a1-a8ae-4c8b-b6d7-ad713111c04d" />
-
-
-
+![alt text](image-7.png)
 
 ## 9. Maps: Choropleth & Point Map
 

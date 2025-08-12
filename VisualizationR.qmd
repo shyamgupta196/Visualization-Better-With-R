@@ -112,7 +112,7 @@ texture_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 18, 22), sd = 2)
 perimeter_mean <- radius_mean * 6 + rnorm(n, 0, 3) # correlated with radius
 area_mean <- radius_mean^2 * pi + rnorm(n, 0, 30)  # correlated with radius
 concavity_mean <- rbeta(n, shape1 = ifelse(diagnosis == "Group A", 2, 4), shape2 = 10)
-
+symmetry_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 0.18, 0.22), sd = 0.03)
 df <- data.frame(
   radius_mean = radius_mean,
   texture_mean = texture_mean,
@@ -527,6 +527,7 @@ df_stack <- data.frame(
   Preference = sample(c("Support", "Oppose", "Neutral"), 200, replace = TRUE)
 )
 ```
+
 ```{r stacked-plot, fig.width=7, fig.height=5}
 stacked_bar <- ggplot(df_stack, aes(x = Region, fill = Preference)) +
   geom_bar(position = "stack") +
