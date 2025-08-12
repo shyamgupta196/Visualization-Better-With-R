@@ -188,10 +188,10 @@ scatter_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) 
 print(scatter_plot)
 ```
 
-![alt text](image-8.png)
-![](image.png)
+![alt text](images/image-8.png)
+![](images/image.png)
 
-### interpretation of why choose swarm plot over scatter plot 
+### Interpretation of why choose swarm plot over scatter plot 
 Swarm plots are preferred over scatter plots when visualizing categorical groupings of continuous data because they prevent overplotting—each data point is visible and not hidden behind others. In scatter plots, especially with many overlapping points, it's hard to assess the true distribution or spot clusters and outliers. Swarm plots arrange points to minimize overlap, making the sample size, density, and group differences much clearer at a glance.
 
 ### Explanation & Interpretation
@@ -307,7 +307,7 @@ print(box_jitter)
 ```
 
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 
 
@@ -353,7 +353,7 @@ violin_plot <- ggplot(data_violin, aes(x = fct_reorder(day, tip_pct), y = tip_pc
 print(violin_plot)
 ```
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 ### Explanation & Interpretation
 
@@ -410,7 +410,7 @@ ggplot(df_air, aes(x = Month)) +
   theme_minimal(base_size = 14) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 ### Explanation & Interpretation
 
@@ -464,7 +464,7 @@ corrplot(
   mar = c(0, 0, 2, 0)        # margin for title
 )
 ```
-![](image-5.png)
+![](images/image-5.png)
 
 ### Explanation & Interpretation
 
@@ -518,7 +518,7 @@ scatter_reg <- ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)
 print(scatter_reg)
 ```
 
-![alt text](image-6.png)
+![alt text](images/image-6.png)
 
 
 ### Explanation & Interpretation
@@ -573,7 +573,7 @@ stacked_bar <- ggplot(df_stack, aes(x = Region, fill = Preference)) +
 
 print(stacked_bar)
 ```
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 ## 9. Maps: Choropleth & Point Map
 
@@ -629,7 +629,7 @@ choropleth <- ggplot(us_data, aes(x = long, y = lat, group = group, fill = socia
 print(choropleth)
 ```
 
-![alt text](image-9.png)
+![alt text](images/image-9.png)
 ### Explanation & Interpretation
 
 - **coord_fixed(1.3):** ensures correct aspect ratio for maps.  
@@ -680,7 +680,7 @@ point_map <- ggplot() +
 print(point_map)
 ```
 
-![alt text](image-10.png) 
+![alt text](images/image-10.png) 
 **NOTE - since this is a random generated data. the data points are not interpretable**
 
 ### Customization Tips
