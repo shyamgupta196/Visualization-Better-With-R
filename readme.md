@@ -589,71 +589,128 @@ I noticed that survey responses and social indicators often have strong geograph
 - **Point Map:** You have point-level observations (e.g., survey locations, incidents) and want to visualize spatial distribution or density.  
 - **Combined Use:** Compare overall regional patterns (choropleth) with specific event clusters or outliers (points).
 
-```r
-# US Choropleth Map
+### Step-by-Step Code for US Choropleth
+
+```{r map-setup, message=FALSE}
 library(ggplot2)
 library(maps)
 library(dplyr)
 
+# Load map data for US states
 states_map <- map_data("state")
+
+# Create synthetic social index data per state
 state_data <- data.frame(
-  region       = tolower(state.name),
-  social_index = runif(50, 0, 100)
+  region = tolower(state.name),
+  social_index = runif(length(state.name), min = 0, max = 100)
 )
 
+# Merge map coordinates with social index
 us_data <- left_join(states_map, state_data, by = "region")
+```
 
-ggplot(us_data, aes(long, lat, group = group, fill = social_index)) +
+```{r choropleth-plot, fig.width=7, fig.height=5}
+choropleth <- ggplot(us_data, aes(x = long, y = lat, group = group, fill = social_index)) +
   geom_polygon(color = "white") +
   coord_fixed(1.3) +
-  theme_minimal() +
+  scale_fill_viridis_c(option = "plasma") +
   labs(
-    title = "US States Social Index Choropleth",
-    fill  = "Social Index"
+    title = "Choropleth: US Social Index by State",
+    subtitle = "Synthetic data demonstrating thematic mapping",
+    fill = "Social Index"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank()
   )
 
-# World Point Map
+print(choropleth)
+```
+
+![alt text](image-9.png)
+### Explanation & Interpretation
+
+- **coord_fixed(1.3):** ensures correct aspect ratio for maps.  
+- **scale_fill_viridis_c():** continuous palette that is perceptually uniform.
+
+**Interpretation:** Darker states have higher social index values in this synthetic example; look for regional clusters (e.g., coastal vs. inland patterns).
+
+### Step-by-Step Code for World Point Map
+
+```{r pointmap-plot, fig.width=7, fig.height=5}
+# Load world map data
 world_map <- map_data("world")
-cities    <- data.frame(
-  city        = paste("City", 1:30),
-  long        = runif(30, -180, 180),
-  lat         = runif(30, -90, 90),
-  event_count = sample(1:100, 30, TRUE)
+
+# Create synthetic event data for cities
+set.seed(456)
+cities <- data.frame(
+  city = paste("City", 1:30),
+  long = runif(30, -180, 180),
+  lat = runif(30, -90, 90),
+  event_count = sample(1:100, 30, replace = TRUE)
 )
 
-ggplot() +
+point_map <- ggplot() +
   geom_polygon(
     data = world_map,
-    aes(long, lat, group = group),
-    fill  = "gray90",
+    aes(x = long, y = lat, group = group),
+    fill = "gray90",
     color = "white"
   ) +
   geom_point(
-    data  = cities,
-    aes(long, lat, size = event_count),
+    data = cities,
+    aes(x = long, y = lat, size = event_count),
     alpha = 0.7
   ) +
   coord_fixed(1.3) +
-  theme_minimal() +
   labs(
-    title = "Global Social Event Locations (Synthetic Data)",
-    size  = "Event Count"
+    title = "Global Points: Synthetic Social Event Counts",
+    subtitle = "Size of point corresponds to event frequency",
+    size = "Event Count"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank()
   )
-```
-<img width="797" alt="image" src="https://github.com/user-attachments/assets/dfe0b73d-6fb3-4f17-bd81-9351c634b920" />
-<img width="797" alt="image" src="https://github.com/user-attachments/assets/ce89a182-dcbd-4712-89a3-ae33e032fdac" />
 
-- coord_fixed(1.3): ensures correct aspect ratio for maps.  
-- scale_fill_viridis_c(): continuous palette that is perceptually uniform.
+print(point_map)
+```
+
+![alt text](image-10.png) 
+**NOTE - since this is a random generated data. the data points are not interpretable**
+
+### Customization Tips
 
 - Use `coord_quickmap()` for faster rendering on large world datasets.  
 - Cluster overlapping points with `geom_jitter()` on lat/long or use packages like `sf` + `ggspatial`.
 
+### Common Pitfalls
+
+- Ignoring map projections: for publication, consider appropriate projections with `coord_map()` or `sf`.
+- Overplotting in points map: adjust transparency or bin with heatmaps.
+
+
 **Interpretation:** Darker states have higher social index values in this synthetic example; look for regional clusters (e.g., coastal vs. inland patterns).
 
-## Conclusion
+# Conclusion
 
-With this tutorial, you now have more weapons in your arsenal to use R and visualize better to draw insights from your data.
+Throughout this tutorial, we've covered:
+
+1. **Swarm Plots:** Reveal individual observations clearly.
+2. **Density Plots:** Smooth distributions for group comparison.
+3. **Box + Jitter:** Combine summary statistics and raw data.
+4. **Violin Plots:** Show full density shapes with internal summaries.
+5. **Bar + Line Combo:** Dual view of counts and trends.
+6. **Correlation Heatmap:** Visual overview of variable associations.
+7. **Scatter + Regression:** Assess linear relationships with confidence bands.
+8. **Stacked Bar Charts:** Display totals and compositions of categories.
+9. **Geographic Maps:** Thematic and point-based spatial visualizations.
+
+Use these techniques as a foundation. Customize further with color palettes, themes, annotations, and interactivity (e.g., with `plotly` or `shiny`). Share reproducible code, include captions explaining insights, and follow accessibility guidelines to make your research inclusive.
 
 ## References and Reading Material
 

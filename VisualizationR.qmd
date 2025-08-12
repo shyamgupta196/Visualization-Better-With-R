@@ -560,6 +560,7 @@ print(stacked_bar)
 
 
 # 9. Geographical Maps: Choropleth & Point Map
+I noticed that survey responses and social indicators often have strong geographic patterns—regions with similar characteristics cluster together. Traditional charts couldn’t reveal these spatial relationships. Mapping data onto geographic outlines and points immediately highlights regional hotspots and geographic trends.
 
 ## 9.1 Context and Motivation
 Spatial visualizations reveal geographic patterns. Choropleth maps color regions by aggregated values; point maps overlay events or counts at coordinates.
@@ -583,6 +584,7 @@ state_data <- data.frame(
 # Merge map coordinates with social index
 us_data <- left_join(states_map, state_data, by = "region")
 ```
+
 ```{r choropleth-plot, fig.width=7, fig.height=5}
 choropleth <- ggplot(us_data, aes(x = long, y = lat, group = group, fill = social_index)) +
   geom_polygon(color = "white") +
@@ -651,6 +653,8 @@ point_map <- ggplot() +
 
 print(point_map)
 ```
+**NOTE - since this is a random generated data. the data points are not interpretable**
+
 ## 9.5 Customization Tips
 
 - Use `coord_quickmap()` for faster rendering on large world datasets.  
