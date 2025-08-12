@@ -78,25 +78,60 @@ Total: **35–50 minutes**
 ## Input Data
 
 #### Generate a toy dataset with two features and a group indicator
+## Input Data
+
 ```{r}
+# 1. load necessary libraries 
+
+library(dplyr)       # Data manipulation
+library(tidyr)       # Data reshaping
+library(ggplot2)     # Core plotting package
+library(ggbeeswarm)  # For geom_beeswarm()
+```
+
+
+```{r}
+# 2. Generate synthetic dataset
+
 set.seed(42)
+n <- 100
+diagnosis <- sample(c("Group A", "Group B"), n, replace = TRUE)
+
+# Group-specific means and correlations
+radius_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 14, 15), sd = 0.7)
+texture_mean <- rnorm(n, mean = ifelse(diagnosis == "Group A", 18, 22), sd = 2)
+perimeter_mean <- radius_mean * 6 + rnorm(n, 0, 3) # correlated with radius
+area_mean <- radius_mean^2 * pi + rnorm(n, 0, 30)  # correlated with radius
+concavity_mean <- rbeta(n, shape1 = ifelse(diagnosis == "Group A", 2, 4), shape2 = 10)
+
 df <- data.frame(
-  radius_mean    = runif(100, 12, 16),
-  texture_mean   = runif(100, 15, 25),
-  perimeter_mean = runif(100, 70, 110),
-  area_mean      = runif(100, 350, 750),
-  concavity_mean = runif(100, 0.1, 0.5),
-  symmetry_mean  = runif(100, 0.15, 0.25),
-  diagnosis      = sample(c("Group A", "Group B"), 100, TRUE)
+  radius_mean = radius_mean,
+  texture_mean = texture_mean,
+  perimeter_mean = perimeter_mean,
+  area_mean = area_mean,
+  concavity_mean = concavity_mean,
+  symmetry_mean = symmetry_mean,
+  diagnosis = diagnosis
 )
+```
+
+
+```{r}
+# 3. Reshape data from wide to long format
+# data before reshaping
+head(df)
+#    - pivot_longer(): collapse multiple feature columns into key-value pairs
 
 df_long <- df %>%
   pivot_longer(
-    radius_mean:symmetry_mean,
-    names_to  = "feature",
+    cols = radius_mean:symmetry_mean,
+    names_to = "feature",
     values_to = "value"
   )
+# data after reshaping
+head(df_long)
 ```
+
 
 
 ## 1. Swarm Plots over Scatter Plots
@@ -113,30 +148,69 @@ A **swarm plot** is useful when you want to display the distribution of a numeri
 - You want a more “transparent” view of the distribution than a box or violin plot alone can provide.
 
 ```{r}
-# Install/load the required packages (uncomment if needed)
-# install.packages(c("dplyr","tidyr","ggplot2","ggbeeswarm"))
+# 2. Create a swarm plot
+#    - aes(x=feature, y=value): map feature names on x-axis and values on y-axis
+#    - color by diagnosis group
 
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(ggbeeswarm)
-
-ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
-  geom_beeswarm(size = 1.5, cex = 1) +
+# Swarm plot
+swarm_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
+  geom_beeswarm(alpha = 0.8, size = 2) +
   theme_minimal(base_size = 14) +
   labs(
-    title = "Distribution of Mean Features by Group",
-    x     = "Feature",
-    y     = "Value"
+    title = "Swarm Plot: Distribution of Mean Features by Diagnosis Group",
+    subtitle = "Swarm plot reveals every individual observation without overlap",
+    x = "Feature",
+    y = "Value",
+    color = "Diagnosis Group"
   ) +
   theme(
-    axis.text.x    = element_text(angle = 45, hjust = 1),
+    axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "top"
   )
-````
+print(swarm_plot)
+
+# Scatter plot for comparison
+scatter_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
+  geom_point(alpha = 0.8, size = 2, position = position_jitter(width = 0)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Scatter Plot: Distribution of Mean Features by Diagnosis Group",
+    subtitle = "Scatter plot suffers from overplotting—points overlap and hide density",
+    x = "Feature",
+    y = "Value",
+    color = "Diagnosis Group"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+print(scatter_plot)
+```
 
 ![](images/Screenshot_2025-05-22_at_01.22.31.png)
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/3040f1b8-0d87-4144-95be-6c360db1cc29" />
+![](image.png)
+
+### interpretation of why choose swarm plot over scatter plot 
+Swarm plots are preferred over scatter plots when visualizing categorical groupings of continuous data because they prevent overplotting—each data point is visible and not hidden behind others. In scatter plots, especially with many overlapping points, it's hard to assess the true distribution or spot clusters and outliers. Swarm plots arrange points to minimize overlap, making the sample size, density, and group differences much clearer at a glance.
+
+### Explanation & Interpretation
+
+- **geom_beeswarm():** Positions points in a compact, non-overlapping arrangement. Useful for moderate sample sizes (<200).  
+- **Transparency (`alpha`):** Helps reveal point density when slight overlap occurs.  
+
+**Interpretation:** In the resulting plot, clusters of points indicate where many observations fall. Differences in the vertical spread between Group A and Group B highlight variability in that feature.
+
+### Customization Tips
+
+- **Point shape & size:** use `shape=` and `size=` inside `geom_beeswarm()`.  
+- **Color palettes:** integrate `scale_color_brewer(palette = "Set1")` or `scale_color_viridis_d()` for colorblind-friendly palettes.  
+- **Grouping multiple categories:** for more than two groups, ensure contrast in color or shape.
+
+### Common Pitfalls
+
+- **Large datasets:** for >500 points, swarm plots can become cluttered; consider violin or box plots instead.  
+- **Uneven group sizes:** extremely small groups may appear as lone points; annotate directly if needed.
 
 
 ## 2. Density Plots
@@ -154,21 +228,42 @@ A density plot provides a smoothed curve of the distribution. It’s like a refi
 * A smoother visualization of distribution is more intuitive than a histogram.
 
 ```{{}r}
-library(ggplot2)
-# Using `df` from above
-ggplot(df, aes(x = area_mean, fill = diagnosis)) +
-  geom_density(alpha = 0.6) +
-  theme_minimal() +
+# Create density plot
+
+density_plot <- ggplot(df, aes(x = area_mean, fill = diagnosis)) +
+  geom_density(alpha = 0.5, adjust = 1.2) + # adjust smoothness parameter
+  theme_minimal(base_size = 14) +
   labs(
-    title = "Density Plot of Area Mean by Group",
-    x     = "Area Mean",
-    y     = "Density",
-    fill  = "Group"
+    title = "Density Plot of Area Mean by Diagnosis Group",
+    subtitle = "Smoothed distribution of 'area_mean' across groups",
+    x = "Area Mean",
+    y = "Density",
+    fill = "Group"
   )
-```{
-}<img width="843" alt="image" src="https://github.com/user-attachments/assets/8ad738df-3386-41a5-8931-c608ab129b8e" />
+
+print(density_plot)
+
+```
+<img width="843" alt="image" src="https://github.com/user-attachments/assets/8ad738df-3386-41a5-8931-c608ab129b8e" />
 
 
+### Explanation & Interpretation
+
+- **adjust:** controls bandwidth of density estimation (higher = smoother).  
+- **alpha:** semi-transparency allows overlapping fills to be distinguishable.  
+
+**Interpretation:** Overlap between curves indicates similar distributions. Divergence reveals differences in modality or skewness.
+
+### Customization Tips
+
+- To overlay median lines: add `geom_vline(data = summary_df, aes(xintercept = median), linetype = "dashed")`.  
+- Compare more than two groups: use faceting (`facet_wrap(~diagnosis)`).  
+- Show rug plots: `geom_rug(alpha = 0.3)` adds tick marks for individual observations.
+
+### Common Pitfalls
+
+- Misleading smoothing: overly small `adjust` can produce spurious bumps; overly large can mask real structure.  
+- Overlapping groups of very different sample sizes: transparency alone may not suffice—consider facetting or scaling.
 
 
 ## 3. Box Plots with Jitter
@@ -185,23 +280,35 @@ By adding a jittered layer of points over the box plot, you get summary statisti
 * You want summary statistics plus raw data.
 * You’re dealing with moderate sample sizes.
 
-```{r}
+```{r boxjitter-setup, message=FALSE}
 library(ggplot2)
 set.seed(123)
-data <- data.frame(
-  name  = c(rep("A",500), rep("B",500), rep("C",20), rep("D",100)),
-  value = c(rnorm(500,10,5), rnorm(500,13,1), rnorm(20,25,4), rnorm(100,12,1))
+data_box <- data.frame(
+  region = rep(c("North","South","East","West"), times = c(150, 150, 30, 70)),
+  score  = c(rnorm(150, 50, 10), rnorm(150, 55, 8), rnorm(30, 65, 12), rnorm(70, 52, 9))
 )
+```
 
-ggplot(data, aes(x = name, y = value, fill = name)) +
-  geom_boxplot() +
-  geom_jitter(color = "black", size = 0.4, alpha = 0.9) +
-  theme_minimal() +
-  labs(title = "Box Plot with Jitter", x = "", y = "Value") +
+```{r boxjitter-plot, fig.width=7, fig.height=5}
+# Create boxplot + jitter
+box_jitter <- ggplot(data_box, aes(x = region, y = score, fill = region)) +
+  geom_boxplot(width = 0.6, outlier.shape = NA) +  # remove default outliers
+  geom_jitter(width = 0.2, size = 1, alpha = 0.6, color = "black") +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Regional Score Distributions with Box Plot + Jitter",
+    subtitle = "Combining summary statistics and individual data points",
+    x = "Region",
+    y = "Score"
+  ) +
   theme(legend.position = "none")
+
+print(box_jitter)
 ```
 
 <img width="843" alt="image" src="https://github.com/user-attachments/assets/e4bc737b-9bdf-4fee-9c73-55548497e8c3" />
+
+![alt text](image-1.png)
 
 
 
@@ -218,25 +325,52 @@ Violin plots combine box plot and density plot ideas, giving you a wider view of
 * Similar to box plots, but you care about the full distribution shape.
 * Comparing multiple groups where you want a holistic view.
 
-```r
+```{r violin-setup, message=FALSE}
 library(ggplot2)
 library(dplyr)
 library(forcats)
 
-data <- read.csv(
-  "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/10_OneNumSevCatSubgroupsSevObs.csv"
-) %>%
-  mutate(tip = round(tip/total_bill * 100, 1))
-
-ggplot(data, aes(x = fct_reorder(day, tip), y = tip, fill = sex)) +
-  geom_violin(position = position_dodge(width = 0.9), alpha = 0.5, outlier.shape = NA) +
-  labs(x = "", y = "Tip (%)", title = "Violin Plot of Tip Percentage by Day and Sex") +
-  coord_cartesian(ylim = c(0, 40)) +
-  theme_minimal()
+# Load example dataset
+url <- "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/10_OneNumSevCatSubgroupsSevObs.csv"
+data_violin <- read.csv(url) %>%
+  mutate(tip_pct = round(tip/total_bill * 100, 1))
 ```
-<img width="843" alt="image" src="https://github.com/user-attachments/assets/ea6b8e00-7eb9-4b43-8983-6e11a6b6a9fb" />
 
+```{r violin-plot, fig.width=7, fig.height=5}
+# Create violin plot
+violin_plot <- ggplot(data_violin, aes(x = fct_reorder(day, tip_pct), y = tip_pct, fill = sex)) +
+  geom_violin(position = position_dodge(width = 0.9), alpha = 0.7, trim = FALSE) +
+  geom_boxplot(width = 0.1, position = position_dodge(width = 0.9), outlier.shape = NA, alpha = 0.5) +
+  coord_cartesian(ylim = c(0, 40)) +
+  labs(
+    title = "Tip Percentage by Day of Week and Gender",
+    subtitle = "Violin plots show kernel density; boxplots show quartiles",
+    x = "Day of Week",
+    y = "Tip (% of Total Bill)",
+    fill = "Gender"
+  ) +
+  theme_minimal(base_size = 14)
 
+print(violin_plot)
+```
+
+![alt text](image-2.png)
+
+### Explanation & Interpretation
+
+- **trim = FALSE:** Display full tail of density beyond data range.  
+- **geom_boxplot():** Adds quartile summary inside violins.  
+
+**Interpretation:** Wider sections of the violin indicate where tips concentrate. Differences between days/genders highlight behavioral patterns.
+
+### Customization Tips
+
+- Adjust bandwidth with `geom_violin(..., adjust = 1.5)`.  
+- Flip coordinates (`coord_flip()`) for horizontal violins if labels overlap.
+
+### Common Pitfalls
+
+- Very small sample sizes: density estimation may be misleading—consider using jitter only.
 
 
 ## 5. Bar + Line Plot
@@ -251,30 +385,50 @@ Use bars for absolute values and overlay a line to depict the trend over time.
 
 * Showing period values (bars) and overall trend (line) for time-series data.
 
-```{r}
+```{r barline-setup, message=FALSE}
 library(ggplot2)
 library(zoo)
 
 data("AirPassengers")
 df_air <- data.frame(
-  Month      = as.Date(as.yearmon(time(AirPassengers))),
+  Month = as.Date(as.yearmon(time(AirPassengers))),
   Passengers = as.numeric(AirPassengers)
 )
-
-ggplot(df_air, aes(x = Month)) +
-  geom_col(aes(y = Passengers), width = 25) +
-  geom_line(aes(y = Passengers), size = 1) +
-  labs(
-    title    = "Monthly International Airline Passengers (1949–1960)",
-    subtitle = "Data from the AirPassengers dataset",
-    x        = "Month",
-    y        = "Passengers"
-  ) +
-  theme_minimal()
 ```
+Now we plot the Bar + Line Combo Plot.
+```{r barline-plot, fig.width=7, fig.height=5}
+# Create bar + line chart
+ggplot(df_air, aes(x = Month)) +
+  geom_col(aes(y = Passengers), width = 25, fill = "steelblue", alpha = 0.7) +
+  geom_line(aes(y = Passengers), size = 1.2, color = "darkred") +
+  labs(
+    title = "Monthly International Airline Passengers (1949–1960)",
+    subtitle = "Bar = monthly count; Line = overall trend",
+    x = "Month",
+    y = "Number of Passengers"
+  ) +
+  scale_x_date(date_labels = "%Y-%m", date_breaks = "1 year") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+![alt text](image-4.png)
 
-<img width="843" alt="image" src="https://github.com/user-attachments/assets/aaa9955b-7c6c-4273-9721-98e19e04f86b" />
+### Explanation & Interpretation
 
+- **geom_col():** Creates bars using data values directly.  
+- **geom_line():** Plots a continuous trend line across points.  
+- **scale_x_date():** Customizes date axis formatting.
+
+**Interpretation:** Seasonal peaks in summer months emerge clearly via bars, while the red trend line contextualizes year-over-year growth.
+
+### Customization Tips
+
+- Add moving average: compute a rolling mean (e.g., `df_air$MA <- rollmean(df_air$Passengers, 12, fill = NA)`) and overlay with `geom_line(aes(y = MA), linetype = "dashed")`.
+
+### Common Pitfalls
+
+- Date axis overcrowding: adjust `date_breaks` or rotate labels.  
+- Inconsistent widths: ensure `width` aligns with date units (days).
 
 
 ## 6. Correlation Heatmap
@@ -290,26 +444,46 @@ A color-scaled matrix showing strength and direction of correlations.
 * Dealing with multiple numerical variables.
 * Quickly assessing which pairs are highly correlated.
 
-```{r}
+```{r corr-setup, message=FALSE}
 library(corrplot)
 
-num_cols    <- c("radius_mean","texture_mean","perimeter_mean",
-                 "area_mean","concavity_mean","symmetry_mean")
-corr_matrix <- cor(df[, num_cols])
+# Use `df` from section 1: numeric columns only
+num_cols <- df %>% select(radius_mean, texture_mean, perimeter_mean, area_mean, concavity_mean, symmetry_mean)
+corr_matrix <- cor(num_cols)
+```
 
+```{r corr-plot, fig.width=6, fig.height=6}
 corrplot(
   corr_matrix,
-  method    = "color",
-  type      = "upper",
-  addCoef.col = "black",
-  tl.col    = "black",
-  title     = "Correlation Heatmap of Synthetic Features",
-  mar       = c(0,0,2,0)
+  method = "shade",       # use shaded squares
+  type = "upper",         # show only upper triangle
+  tl.col = "black",       # variable names in black
+  addCoef.col = "white",  # add correlation coefficients
+  number.cex = 0.7,         # size of coefficients
+  tl.srt = 45,              # rotate labels
+  title = "Correlation Heatmap of Synthetic Features",
+  mar = c(0, 0, 2, 0)        # margin for title
 )
 ```
-<img width="778" alt="image" src="https://github.com/user-attachments/assets/61b8c043-1348-45db-b773-2ff7c1108be6" />
+![](image-5.png)
 
+### Explanation & Interpretation
 
+- **method:** defines tile style (`shade`, `color`, `circle`).  
+- **type = 'upper':** hides redundant lower triangle.  
+- **addCoef.col:** overlays numeric r-values.
+
+**Interpretation:** High positive correlations (e.g., `perimeter_mean` vs. `radius_mean`) appear as darker tiles; near-zero appear as lighter.
+
+### Customization Tips
+
+- Use `corrplot.mixed()` to combine circle and number views.  
+- Cluster variables with `hc.order = TRUE, order = "hclust"` for dendrogram ordering.
+
+### Common Pitfalls
+
+- Correlation does not imply causation: always inspect scatter plots for nonlinear patterns.  
+- Including non-numeric data: ensure you select only numeric columns.
 
 
 ## 7. Scatter Plot with Regression Line
@@ -325,21 +499,44 @@ Overlay a linear regression line on a scatter plot to gauge trend direction and 
 * Examining relationship between two numerical variables.
 * Getting a quick visual indication of a linear trend.
 
-```{r}
-ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
-  geom_point(size = 2, alpha = 0.7) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(
-    title = "Scatter Plot with Regression Line",
-    x     = "Radius Mean",
-    y     = "Area Mean"
-  ) +
-  theme_minimal()
+```{r scatter-setup, message=FALSE}
+# Reuse `df` from section 1
+ggplot2::theme_set(theme_minimal(base_size = 14))
 ```
-<img width="790" alt="image" src="https://github.com/user-attachments/assets/af021ee0-a19a-460b-9baf-6cd624623634" />
+
+```{r scatter-plot, fig.width=7, fig.height=5}
+scatter_reg <- ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
+  geom_point(alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, linetype = "dashed") +
+  labs(
+    title = "Scatter Plot with Linear Regression Line",
+    subtitle = "Relationship between radius_mean and area_mean by group",
+    x = "Radius Mean",
+    y = "Area Mean",
+    color = "Diagnosis"
+  )
+
+print(scatter_reg)
+```
+
+![alt text](image-6.png)
 
 
+### Explanation & Interpretation
 
+- **geom_smooth(method = 'lm', se = TRUE):** adds linear model fit with shaded confidence band.  
+
+**Interpretation:** The slope of the dashed line indicates the strength and direction of the linear relationship. Overlapping confidence bands suggest similar slopes across groups or pooled data.
+
+### Customization Tips
+
+- To fit separate models per group: include `aes(group = diagnosis)` inside `geom_smooth()`.  
+- For nonlinear trends: use `method = 'loess'`.
+
+### Common Pitfalls
+
+- Overfitting with LOESS on large samples—consider limiting points or bandwith.  
+- Outliers can disproportionately influence linear fit.
 
 ## 8. Stacked Bar Charts
 
