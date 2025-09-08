@@ -139,14 +139,6 @@ head(df_long)
 **The Discovery:**  
 My first big “aha” moment came when I had to compare numerical data (like response scores) across different groups (like age brackets). I found that regular scatter plots overlapped points too much—making it hard to see the data distribution.
 
-**The Hero (Swarm Plot):**  
-A **swarm plot** is useful when you want to display the distribution of a numerical variable across different categories *without losing individual data points*. Unlike simple scatter plots, swarm plots arrange points to avoid overlap, helping you see each observation more clearly.
-
-**When to Use:**  
-- You have a moderate number of data points (not too large).  
-- You want to see each individual data point by category.  
-- You want a more “transparent” view of the distribution than a box or violin plot alone can provide.
-
 ```{r}
 # 2. Create a swarm plot
 #    - aes(x=feature, y=value): map feature names on x-axis and values on y-axis
@@ -169,6 +161,18 @@ swarm_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
   )
 print(swarm_plot)
 
+```
+
+![](images/image.png)
+**The Hero (Swarm Plot):**  
+A **swarm plot** is useful when you want to display the distribution of a numerical variable across different categories *without losing individual data points*. Unlike simple scatter plots, swarm plots arrange points to avoid overlap, helping you see each observation more clearly.
+
+**When to Use:**  
+- You have a moderate number of data points (not too large).  
+- You want to see each individual data point by category.  
+- You want a more “transparent” view of the distribution than a box or violin plot alone can provide.
+
+```{r}
 # Scatter plot for comparison
 scatter_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
   geom_point(alpha = 0.8, size = 2, position = position_jitter(width = 0)) +
@@ -188,7 +192,6 @@ print(scatter_plot)
 ```
 
 ![alt text](images/image-8.png)
-![](images/image.png)
 
 ### Interpretation of why choose swarm plot over scatter plot 
 Swarm plots are preferred over scatter plots when visualizing categorical groupings of continuous data because they prevent overplotting—each data point is visible and not hidden behind others. In scatter plots, especially with many overlapping points, it's hard to assess the true distribution or spot clusters and outliers. Swarm plots arrange points to minimize overlap, making the sample size, density, and group differences much clearer at a glance.
