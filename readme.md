@@ -77,7 +77,7 @@ Total: **35–50 minutes**
 
 ## Input Data
 
-#### Generate a toy dataset with two features and a group indicator
+#### We Generate different toy dataset with two features and a group indicator
 
 ```{r}
 # 1. load necessary libraries 

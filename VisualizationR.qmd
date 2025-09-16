@@ -98,6 +98,10 @@ library(ggplot2)     # Core plotting package
 library(ggbeeswarm)  # For geom_beeswarm()
 ```
 
+# 1. Swarm Plots over Scatter Plots
+
+My first big “aha” moment came when I had to compare numerical data (like response scores) across different groups (like age brackets). I found that regular scatter plots overlapped points too much—making it hard to see the data distribution.
+
 
 ```{r}
 # 2. Generate synthetic dataset
@@ -122,10 +126,7 @@ df <- data.frame(
   symmetry_mean = symmetry_mean,
   diagnosis = diagnosis
 )
-```
 
-
-```{r}
 # 3. Reshape data from wide to long format
 # data before reshaping
 head(df)
@@ -140,15 +141,6 @@ df_long <- df %>%
 # data after reshaping
 head(df_long)
 ```
-
-# 1. Swarm Plots over Scatter Plots
-
-My first big “aha” moment came when I had to compare numerical data (like response scores) across different groups (like age brackets). I found that regular scatter plots overlapped points too much—making it hard to see the data distribution.
-
-## 1.1 Context and Motivation
-When comparing numerical values across categories (e.g., satisfaction scores by age group), simple scatter plots may suffer from overplotting: points overlap and hide density information. Swarm plots (bee swarms) solve this by adjusting point positions to minimize overlap, making every observation visible.
-
-## 1.2 Step-by-Step Code
 
 ```{r swarm-plot, fig.width=7, fig.height=5}
 # 1. Create a swarm plot
@@ -171,7 +163,14 @@ swarm_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
     legend.position = "top"
   )
 print(swarm_plot)
+```
 
+## 1.1 Context and Motivation
+When comparing numerical values across categories (e.g., satisfaction scores by age group), simple scatter plots may suffer from overplotting: points overlap and hide density information. Swarm plots (bee swarms) solve this by adjusting point positions to minimize overlap, making every observation visible.
+
+## 1.2 Step-by-Step Code
+
+```{r}
 # 2. Scatter plot for comparison
 scatter_plot <- ggplot(df_long, aes(x = feature, y = value, color = diagnosis)) +
   geom_point(alpha = 0.8, size = 2, position = position_jitter(width = 0)) +
