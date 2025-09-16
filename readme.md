@@ -7,8 +7,6 @@
 **Affiliation:** GESIS Leibniz Institute for the Social Sciences  
 **Date:** 2025-08-12  
 
-
-
 ### Learning Objective
 I was working on a social science research project—trying to decode the relationship between people’s well-being and their social interactions. After spending hours collecting survey responses, I realized that raw numbers alone weren’t telling the entire story.
 
@@ -215,7 +213,112 @@ Swarm plots are preferred over scatter plots when visualizing categorical groupi
 - **Uneven group sizes:** extremely small groups may appear as lone points; annotate directly if needed.
 
 
-## 2. Density Plots
+## 2. Scatter Plot with Regression Line
+
+**The Discovery:**
+I often wondered if one factor could predict another—like, does “annual income” predict “charitable donations”?
+
+**The Hero (Scatter + Regression):**
+Overlay a linear regression line on a scatter plot to gauge trend direction and strength.
+
+**When to Use:**
+
+* Examining relationship between two numerical variables.
+* Getting a quick visual indication of a linear trend.
+
+```{r scatter-setup, message=FALSE}
+# Reuse `df` from section 1
+ggplot2::theme_set(theme_minimal(base_size = 14))
+```
+
+```{r scatter-plot, fig.width=7, fig.height=5}
+scatter_reg <- ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
+  geom_point(alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, linetype = "dashed") +
+  labs(
+    title = "Scatter Plot with Linear Regression Line",
+    subtitle = "Relationship between radius_mean and area_mean by group",
+    x = "Radius Mean",
+    y = "Area Mean",
+    color = "Diagnosis"
+  )
+
+print(scatter_reg)
+```
+
+![alt text](images/image-6.png)
+
+
+### Explanation & Interpretation
+
+- **geom_smooth(method = 'lm', se = TRUE):** adds linear model fit with shaded confidence band.  
+
+**Interpretation:** The slope of the dashed line indicates the strength and direction of the linear relationship. Overlapping confidence bands suggest similar slopes across groups or pooled data.
+
+### Customization Tips
+
+- To fit separate models per group: include `aes(group = diagnosis)` inside `geom_smooth()`.  
+- For nonlinear trends: use `method = 'loess'`.
+
+### Common Pitfalls
+
+- Overfitting with LOESS on large samples—consider limiting points or bandwith.  
+- Outliers can disproportionately influence linear fit.
+
+## 3. Correlation Heatmap
+
+**The Discovery:**
+I needed an overview of how numerical features related. Rather than a numeric matrix, a **correlation heatmap** highlights associations at a glance.
+
+**The Hero (Correlation Heatmap):**
+A color-scaled matrix showing strength and direction of correlations.
+
+**When to Use:**
+
+* Dealing with multiple numerical variables.
+* Quickly assessing which pairs are highly correlated.
+
+```{r corr-setup, message=FALSE}
+library(corrplot)
+
+# Use `df` from section 1: numeric columns only
+num_cols <- df %>% select(radius_mean, texture_mean, perimeter_mean, area_mean, concavity_mean, symmetry_mean)
+corr_matrix <- cor(num_cols)
+```
+
+```{r corr-plot, fig.width=6, fig.height=6}
+corrplot(
+  corr_matrix,
+  method = "shade",       # use shaded squares
+  type = "upper",         # show only upper triangle
+  tl.col = "black",       # variable names in black
+  addCoef.col = "white",  # add correlation coefficients
+  number.cex = 0.7,         # size of coefficients
+  tl.srt = 45,              # rotate labels
+  title = "Correlation Heatmap of Synthetic Features",
+  mar = c(0, 0, 2, 0)        # margin for title
+)
+```
+![](images/image-5.png)
+
+### Explanation & Interpretation
+
+- **method:** defines tile style (`shade`, `color`, `circle`).  
+- **type = 'upper':** hides redundant lower triangle.  
+- **addCoef.col:** overlays numeric r-values.
+
+**Interpretation:** High positive correlations (e.g., `perimeter_mean` vs. `radius_mean`) appear as darker tiles; near-zero appear as lighter.
+
+### Customization Tips
+
+- Use `corrplot.mixed()` to combine circle and number views.  
+- Cluster variables with `hc.order = TRUE, order = "hclust"` for dendrogram ordering.
+
+### Common Pitfalls
+
+- Correlation does not imply causation: always inspect scatter plots for nonlinear patterns.  
+- Including non-numeric data: ensure you select only numeric columns.
+## 4. Density Plots
 
 **The Discovery:**
 Next, I wanted to understand the distribution of responses for certain questions (like “level of trust in institutions”) across two demographic segments. A bar chart wasn’t capturing the shape of each distribution. A histogram might work, but I wanted a smoothed look.
@@ -268,7 +371,7 @@ print(density_plot)
 - Overlapping groups of very different sample sizes: transparency alone may not suffice—consider facetting or scaling.
 
 
-## 3. Box Plots with Jitter
+## 5. Box Plots with Jitter
 
 **The Discovery:**
 Sometimes, I needed a quick sense of how responses (like “support for policy X”) varied across multiple categories (such as different regions). A **box plot** shows median, quartiles, and outliers, but I still wanted to see *some* individual points.
@@ -308,12 +411,9 @@ box_jitter <- ggplot(data_box, aes(x = region, y = score, fill = region)) +
 print(box_jitter)
 ```
 
-
 ![alt text](images/image-1.png)
 
-
-
-## 4. Violin Plot
+## 6. Violin Plot
 
 **The Discovery:**
 I wanted to see not just the median and quartiles but the full *kernel density* shape of my data. A **violin plot** shows both summary statistics and density.
@@ -374,7 +474,7 @@ print(violin_plot)
 - Very small sample sizes: density estimation may be misleading—consider using jitter only.
 
 
-## 5. Bar + Line Plot
+## 7. Bar + Line Plot
 
 **The Discovery:**
 When analyzing time-series survey data (e.g., monthly participant counts), I wanted both bar-chart values and a trend line.
@@ -430,114 +530,6 @@ ggplot(df_air, aes(x = Month)) +
 
 - Date axis overcrowding: adjust `date_breaks` or rotate labels.  
 - Inconsistent widths: ensure `width` aligns with date units (days).
-
-
-## 6. Correlation Heatmap
-
-**The Discovery:**
-I needed an overview of how numerical features related. Rather than a numeric matrix, a **correlation heatmap** highlights associations at a glance.
-
-**The Hero (Correlation Heatmap):**
-A color-scaled matrix showing strength and direction of correlations.
-
-**When to Use:**
-
-* Dealing with multiple numerical variables.
-* Quickly assessing which pairs are highly correlated.
-
-```{r corr-setup, message=FALSE}
-library(corrplot)
-
-# Use `df` from section 1: numeric columns only
-num_cols <- df %>% select(radius_mean, texture_mean, perimeter_mean, area_mean, concavity_mean, symmetry_mean)
-corr_matrix <- cor(num_cols)
-```
-
-```{r corr-plot, fig.width=6, fig.height=6}
-corrplot(
-  corr_matrix,
-  method = "shade",       # use shaded squares
-  type = "upper",         # show only upper triangle
-  tl.col = "black",       # variable names in black
-  addCoef.col = "white",  # add correlation coefficients
-  number.cex = 0.7,         # size of coefficients
-  tl.srt = 45,              # rotate labels
-  title = "Correlation Heatmap of Synthetic Features",
-  mar = c(0, 0, 2, 0)        # margin for title
-)
-```
-![](images/image-5.png)
-
-### Explanation & Interpretation
-
-- **method:** defines tile style (`shade`, `color`, `circle`).  
-- **type = 'upper':** hides redundant lower triangle.  
-- **addCoef.col:** overlays numeric r-values.
-
-**Interpretation:** High positive correlations (e.g., `perimeter_mean` vs. `radius_mean`) appear as darker tiles; near-zero appear as lighter.
-
-### Customization Tips
-
-- Use `corrplot.mixed()` to combine circle and number views.  
-- Cluster variables with `hc.order = TRUE, order = "hclust"` for dendrogram ordering.
-
-### Common Pitfalls
-
-- Correlation does not imply causation: always inspect scatter plots for nonlinear patterns.  
-- Including non-numeric data: ensure you select only numeric columns.
-
-
-## 7. Scatter Plot with Regression Line
-
-**The Discovery:**
-I often wondered if one factor could predict another—like, does “annual income” predict “charitable donations”?
-
-**The Hero (Scatter + Regression):**
-Overlay a linear regression line on a scatter plot to gauge trend direction and strength.
-
-**When to Use:**
-
-* Examining relationship between two numerical variables.
-* Getting a quick visual indication of a linear trend.
-
-```{r scatter-setup, message=FALSE}
-# Reuse `df` from section 1
-ggplot2::theme_set(theme_minimal(base_size = 14))
-```
-
-```{r scatter-plot, fig.width=7, fig.height=5}
-scatter_reg <- ggplot(df, aes(x = radius_mean, y = area_mean, color = diagnosis)) +
-  geom_point(alpha = 0.7, size = 2) +
-  geom_smooth(method = "lm", se = TRUE, linetype = "dashed") +
-  labs(
-    title = "Scatter Plot with Linear Regression Line",
-    subtitle = "Relationship between radius_mean and area_mean by group",
-    x = "Radius Mean",
-    y = "Area Mean",
-    color = "Diagnosis"
-  )
-
-print(scatter_reg)
-```
-
-![alt text](images/image-6.png)
-
-
-### Explanation & Interpretation
-
-- **geom_smooth(method = 'lm', se = TRUE):** adds linear model fit with shaded confidence band.  
-
-**Interpretation:** The slope of the dashed line indicates the strength and direction of the linear relationship. Overlapping confidence bands suggest similar slopes across groups or pooled data.
-
-### Customization Tips
-
-- To fit separate models per group: include `aes(group = diagnosis)` inside `geom_smooth()`.  
-- For nonlinear trends: use `method = 'loess'`.
-
-### Common Pitfalls
-
-- Overfitting with LOESS on large samples—consider limiting points or bandwith.  
-- Outliers can disproportionately influence linear fit.
 
 ## 8. Stacked Bar Charts
 
